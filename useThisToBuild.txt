@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.9)
+project(StockStallion)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(BUILD_1 main)
+set(SOURCE_FILES_1
+        core.cpp
+#        StockStallion.cpp
+        StockStallion.h
+        sqlite/sqlite3.c
+        sqlite/sqlite3.h
+        sqlite/sqlite3ext.h)
+
+add_executable(${BUILD_1} ${SOURCE_FILES_1})
+
+set(BUILD_2 tests)
+set(SOURCE_FILES_2
+        tests/tests.cpp
+#        StockStallion.cpp
+        StockStallion.h
+        sqlite/sqlite3.c
+        sqlite/sqlite3.h
+        sqlite/sqlite3ext.h)
+add_executable(${BUILD_2} ${SOURCE_FILES_2})
+
+set(BUILD_3 curl_test)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -lcurl")
+set(SOURCE_FILES_3 curl/main.cpp)
+target_link_libraries(${BUILD_3} curl/curl)
+add_executable(${BUILD_3} ${SOURCE_FILES_3})
