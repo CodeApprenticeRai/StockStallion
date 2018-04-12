@@ -54,17 +54,19 @@ void StockStallion::portfolioView(){};
 // ################# PROMPTS #################
 
 // displays loginRegister View options to user and returns their choice
-int StockStallion::loginRegisterPrompt(){
+int StockStallion::loginRegisterPrompt()
+{
   std::cout << "\nChoose an option:\n\n";
   std::cout << "[1]\tLogin\n";
   std::cout << "[2]\tRegister\n";
     std::cout << "[3]\tExit\n\n";
   int choice;
+    std:cin >> choice;
   bool validChoice;
 
   //valdiate input
   validChoice = verifyChoiceInRange(choice, 2);
-  std::cout << validChoice;
+  //std::cout << validChoice;
   while( (std::cin.fail()) or !validChoice ) {
       std::cout << "Enter an integer in range 1-2.\n";
       std::cin.clear();

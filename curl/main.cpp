@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#include <curl/curl.h>
+#include </curl/curl.h>
 
 struct request {
     std::string base = std::string("https://www.alphavantage.co/query?")
