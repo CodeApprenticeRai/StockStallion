@@ -28,7 +28,7 @@ int main(){
 
   // StockStallion::User user = app.commandLineLoginRegisterView();
 
-  // app.commandLineMainMenuView( user )
+//   app.commandLineMainMenuView();
 
-  return 0;
+return 0;
 }

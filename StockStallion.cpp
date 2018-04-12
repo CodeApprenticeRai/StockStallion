@@ -5,6 +5,8 @@
 #include <vector>
 #include "./sqlite/sqlite3.h"
 #include "Database.h"
+#include "User.h"
+
 // Constructor: Initiatlizes component and prints Welcome Message.
 StockStallion::StockStallion(){
   // initialize db on startup
@@ -28,7 +30,9 @@ void StockStallion::commandLineLoginRegisterView(){
         int choice = StockStallion::loginRegisterPrompt();
 
         if (choice == 1) {
-            authorizeLogin();
+            if( authorizeLogin() ){
+
+            }
             return;
         }
         if (choice == 2) {
@@ -173,13 +177,13 @@ void StockStallion::addUserToDB(std::string username, std::string password) {
     db = new Database("stockstallion.db");
     std::string _id = std::to_string( rand() % 1000);
     std::string stock_list = std::string("");
-    std::string _q = std::string("INSERT INTO users(id, username, password, stocklist)") + "VALUES(" + "'" + _id + "'" + "," + "'" + username + "'" + "," + "'" + password + "'" + ",'placeholder');";
+    std::string _q = std::string("INSERT INTO users(id, username, password, stocklist)") + "VALUES(" + "'" + _id + "'" + "," + "'" + username + "'" + "," + "'" + password + "'" + ",'');";
     char *q2 = &_q[0u];
     db->query(q2);
     db->close();
 }
 
-void StockStallion::verifyLogin(std::string username, std::string password) {
+bool StockStallion::verifyLogin(std::string username, std::string password) {
     Database *db;
     db = new Database("stockstallion.db");
     std::string _q = std::string("SELECT username, password, stocklist FROM users WHERE username='") + username + "' AND password='" + password +"';";
@@ -189,7 +193,7 @@ void StockStallion::verifyLogin(std::string username, std::string password) {
     if (result.empty()){
         std::cout << "Incorrect Username / Password Combination.";
         db->close();
-        return;
+        return false;
     }
 
 
@@ -203,7 +207,7 @@ void StockStallion::verifyLogin(std::string username, std::string password) {
                 std::string stock_list = row.at(2);
 //                create static user object here
                 db->close();
-                return;
+                return true;
             }
         }
 //        std::vector<std::string> user_vector = result.at(0);
@@ -347,9 +351,27 @@ bool StockStallion::authorizeLogin(){
     std::cout << "\n\nEnter a password: ";
     std::cin >> password;
     this -> verifyPassword(password);
-    StockStallion::verifyLogin(username, password);
+    bool verified = StockStallion::verifyLogin(username, password);
+
+    if (verified){
+        buildUserObject(username);
+    }
     return true;
 }
 
+void StockStallion::buildUserObject(std::string username){
+    Database *db;
+    db = new Database("stockstallion.db");
+    std::string _q = std::string("SELECT username, password, stocklist FROM users WHERE username='") + username + "'";
+    char *q = &_q[0u];
+    std::vector<std::vector<std::string> > result = db->query(q);
 
+    vector<std::string> userInfo = result.at(0);
+
+    std::string stockList = userInfo.at(2);
+
+    this->user = new User(username, stockList);
+
+    return;
+}
 // ################# END OF INPUT HANDLING FUNCTIONS #################
