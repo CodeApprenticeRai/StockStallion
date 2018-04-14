@@ -1,4 +1,3 @@
-
 #ifndef STOCKSTALLION_H
 #define STOCKSTALLION_H
 #include <limits>
@@ -18,9 +17,19 @@ class StockStallion {
 
 		// Prompts
 		int loginRegisterPrompt();
+        int portfolioViewPrompt();
+
+
+        // User Object Manipulation Fucntions
+        void addStock();
+        void removeStock();
+        void viewStocks();
+
 
 		// Database Functions
 		void initializeDB();
+
+        void saveState();
 
 		void addUserToDB(std::string username, std::string password);
 
@@ -47,7 +56,7 @@ class StockStallion {
 
 
 	private:
-		User *user = nullptr;
+		User *loggedInAsUser = nullptr;
 
 };
 

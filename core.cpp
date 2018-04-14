@@ -26,9 +26,7 @@ int main(){
 //    bool break_condition = false;
     app.commandLineLoginRegisterView();
 
-  // StockStallion::User user = app.commandLineLoginRegisterView();
-
-//   app.commandLineMainMenuView();
+    app.portfolioView();
 
 return 0;
 }

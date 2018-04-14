@@ -29,25 +29,51 @@ void StockStallion::commandLineLoginRegisterView(){
     while (!break_condition) {
         int choice = StockStallion::loginRegisterPrompt();
 
-        if (choice == 1) {
-            if( authorizeLogin() ){
-
-            }
-            return;
-        }
-        if (choice == 2) {
-            StockStallion::registerNewUser();
-            return;
-        }
-        if (choice == 3) {
-            std::cout << "Thank you for using Stock Stallion!\n\n";
-            exit(0);
+        switch(choice){
+            case 1:
+                if( authorizeLogin() ){
+                    return;
+                }
+            case 2:
+                StockStallion::registerNewUser();
+            case 3:
+                std::cout << "Thank you for using Stock Stallion!\n\n";
+                exit(0);
         }
     }
 }
 
 
-void StockStallion::portfolioView(){};
+void StockStallion::portfolioView(){
+    std::cout << "\n\n Welcome to the StockStallion Main Menu!\n\n";
+
+    User* user = this->loggedInAsUser;
+
+
+    bool break_condition = false;
+
+    while (!break_condition) {
+        int choice = StockStallion::portfolioViewPrompt();
+
+        switch(choice){
+            case 1:
+                StockStallion::addStock();
+                break;
+            case 2:
+                StockStallion::removeStock();
+                break;
+            case 3:
+                viewStocks();
+                break;
+            case 4:
+                std::cout << "Thank you for using Stock Stallion!\n\n";
+                saveSt1
+                ate();
+                exit(0);
+        }
+    }
+    return;
+}
 
 // ################# END OF VIEWS #################
 
@@ -69,7 +95,7 @@ int StockStallion::loginRegisterPrompt()
   bool validChoice;
 
   //valdiate input
-  validChoice = verifyChoiceInRange(choice, 2);
+  validChoice = verifyChoiceInRange(choice, 3);
   //std::cout << validChoice;
   while( (std::cin.fail()) or !validChoice ) {
       std::cout << "Enter an integer in range 1-2.\n";
@@ -81,6 +107,40 @@ int StockStallion::loginRegisterPrompt()
   }
   return choice;
 }
+
+int StockStallion::portfolioViewPrompt() {
+        std::cout << "\nChoose an option:\n\n";
+        std::cout << "[1]\tAdd a Stock\n";
+        std::cout << "[2]\tRemove a Stock\n";
+        std::cout << "[3]\tView Stock Prices\n";
+        std::cout << "[4]\tExit\n\n";
+        int choice;
+        std:cin >> choice;
+        bool validChoice;
+
+        //valdiate input
+        validChoice = verifyChoiceInRange(choice, 4);
+        //std::cout << validChoice;
+        while( (std::cin.fail()) or !validChoice ) {
+            std::cout << "Enter an integer in range 1-2.\n";
+            std::cin.clear();
+            std::cin.ignore(256, '\n');
+            std::cout << "Choice: ";
+            std::cin >> choice;
+            validChoice = verifyChoiceInRange(choice, 2);
+        }
+        return choice;
+}
+
+
+
+
+// USER MANIPULATION FUNCTIONS
+
+void StockStallion::addStock(){};
+void StockStallion::removeStock(){};
+void StockStallion::viewStocks(){};
+
 
 // ################# END OF PROMPTS #################
 
@@ -145,6 +205,7 @@ void StockStallion::initializeDB(){
     db->close();
 }
 
+void StockStallion::saveState(){};
 // void StockStallion::addUserToDB(std::string username, std::string password){
 //   sqlite3 *db;
 //   char *zErrMsg = 0;
@@ -372,7 +433,7 @@ void StockStallion::buildUserObject(std::string username){
 
     std::string stockList = userInfo.at(2);
 
-    this->user = new User(username, stockList);
+    this->loggedInAsUser = new User(username, stockList);
 
     return;
 }

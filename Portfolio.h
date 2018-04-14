@@ -28,7 +28,11 @@ class Portfolio
 
         void add_stock(Stock, int);
         void rmv_stock(Stock);
-        /* adds/removes a Stock to the stocks vector
+
+    std::vector<Stock>* getStocks(){
+        return this->stocks;
+    }
+    /* adds/removes a Stock to the stocks vector
            along with an initial # of shares, and
            returns the dollar value of the transaction */
 
