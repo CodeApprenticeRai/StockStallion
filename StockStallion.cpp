@@ -57,7 +57,7 @@ void StockStallion::portfolioView(){
 
         switch(choice){
             case 1:
-                StockStallion::addStock();
+                StockStallion::addStock(user->getUsername(), user->getStockList());
                 break;
             case 2:
                 StockStallion::removeStock();
@@ -67,8 +67,7 @@ void StockStallion::portfolioView(){
                 break;
             case 4:
                 std::cout << "Thank you for using Stock Stallion!\n\n";
-                saveSt1
-                ate();
+                //saveState();
                 exit(0);
         }
     }
@@ -137,9 +136,148 @@ int StockStallion::portfolioViewPrompt() {
 
 // USER MANIPULATION FUNCTIONS
 
-void StockStallion::addStock(){};
-void StockStallion::removeStock(){};
-void StockStallion::viewStocks(){};
+struct httpLink {
+    std::string base = std::string("https://www.alphavantage.co/query?");
+    std::string function = std::string("function=TIME_SERIES_INTRADAY");
+    std::string symbol = std::string("symbol=");
+    std::string interval = std::string("interval=1min");
+    std::string api_key = std::string("apikey=CRINRUHDWCNFTVK2");
+
+};
+
+//checks if the curl request can be made for the given user input
+bool StockStallion::curlRequest(std::string ticker){
+    CURL *curl;
+
+    httpLink request;
+
+    request.symbol.append(ticker);
+
+    std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
+
+    if(curl){
+        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
+        CURLcode curlResult = curl_easy_perform(curl);
+
+        /* always cleanup */
+        curl_easy_cleanup(curl);
+
+        if(curlResult !=CURLE_OK){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    else{
+        return false;
+    }
+
+
+}
+
+std::string StockStallion::curlRequestPrice(std::string ticker){
+    CURL *curl;
+
+    httpLink request;
+
+    request.symbol = "symbol=";
+
+    request.symbol.append(ticker);
+
+    std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
+
+    if(curl){
+        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
+
+        std::string resultBody { };
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resultBody);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, static_cast<size_t (__stdcall*)(char*, size_t, size_t, void*)>(
+                [](char* ptr, size_t size, size_t nmemb, void* resultBody){
+                    *(static_cast<std::string*>(resultBody)) += std::string {ptr, size * nmemb};
+                    return size * nmemb;
+                }
+        ));
+
+        CURLcode curlResult = curl_easy_perform(curl);
+
+        if(curlResult !=CURLE_OK){
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(curlResult));
+        }
+
+        //Finds and returns the current price of the stock
+        std::string openingPrice;
+
+        for(int position = 0; position < resultBody.length();){
+            if (resultBody.find("1. open\": \"") != -1)
+            {
+                position = resultBody.find("1. open\": \"");
+
+                openingPrice = resultBody.at(position+11);
+                openingPrice = openingPrice + resultBody.at(position+12) + resultBody.at(position+13) +
+                               resultBody.at(position+14) + resultBody.at(position+15) + resultBody.at(position+16)
+                               + resultBody.at(position+17);
+
+                return openingPrice;
+            }
+        }
+
+        /* always cleanup */
+        curl_easy_cleanup(curl);
+    }
+}
+
+
+void StockStallion::addStock(std::string username, std::string stocklist){
+    bool checker = true;
+    std::string ticker_symbol;
+
+    //error checking for ensuring the stock the user wants to add is valid
+    while(checker){
+        std::cout << "\nEnter the Ticker Symbol You Would Like to Add: ";
+        std::cin >> ticker_symbol;
+
+        if (ticker_symbol.length() > 5 ){
+            std::cout <<"\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+        else if(curlRequest(ticker_symbol)){
+            std::cout <<"\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+        else{
+            checker = false;
+        }
+    }
+
+    stocklist = stocklist + ticker_symbol + ",";
+
+    //adds stock to user profile and db
+    // take username as a param, stocklist (the comma separated string version) as a param
+//    Database *db;
+//    db = new Database("stockstallion.db");
+//    std::string _q = std::string("UPDATE users SET stocklist ='") + stocklist + "' WHERE username='" + username + "';";
+//    char *q = &_q[0u];
+//
+//
+//    db->query(q);
+//    delete q;
+//    db->close();
+
+
+
+};
+void StockStallion::removeStock(){
+
+
+};
+void StockStallion::viewStocks(){
+    //uses curlRequestPrice function for each stock object in list then returns the stock and its price
+
+
+
+};
 
 
 // ################# END OF PROMPTS #################

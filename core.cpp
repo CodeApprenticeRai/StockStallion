@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <afxres.h>
+//#include <afxres.h>
 #include "./sqlite/sqlite3.h"
 #include "StockStallion.h"
 #include "StockStallion.cpp"

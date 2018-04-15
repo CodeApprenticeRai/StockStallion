@@ -10,7 +10,7 @@
 User::User(std::string username, std::string stockList) // std::string email; // double balance)
 {
     this->username = username;
-
+    this->stockList = stockList;
 
 
     Portfolio *p = new Portfolio(stockList);
@@ -21,9 +21,15 @@ std::string User::getUsername() {
     return this->username;
 }
 
+std::string User::getStockList(){
+    return this->stockList;
+}
+
 std::vector<Stock>* User::getStocks() {
     return this->portfolios.at(0).getStocks();
 }
+
+
 
 //    this->password = password;
 //    this->email = email;

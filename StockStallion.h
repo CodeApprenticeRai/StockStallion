@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "User.h"
+#include <curl/curl.h>
 
 
 class StockStallion {
@@ -20,8 +21,11 @@ class StockStallion {
         int portfolioViewPrompt();
 
 
-        // User Object Manipulation Fucntions
-        void addStock();
+        // User Object Manipulation Functions
+        bool curlRequest(std::string);
+        std::string curlRequestPrice(std::string);
+
+        void addStock(std::string, std::string);
         void removeStock();
         void viewStocks();
 

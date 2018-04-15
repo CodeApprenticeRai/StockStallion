@@ -14,12 +14,14 @@ class User {
     //        string email;
     //        double balance;
         std::vector<Portfolio> portfolios; //This dumb this wont work :/
+        std::string stockList;
 //        std::vector<Stocks> stock
 
     public:
 //        User(std::string username, std::string password, std::string email); // , double balance);
         User(std::string username, std::string stockList);
         std::string getUsername();
+        std::string getStockList();
         std::vector<Stock>* getStocks();
 //        void addMoney(double money);
 //        void removeMoney(double money);

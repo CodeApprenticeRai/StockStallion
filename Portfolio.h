@@ -29,6 +29,8 @@ class Portfolio
         void add_stock(Stock, int);
         void rmv_stock(Stock);
 
+
+
     std::vector<Stock>* getStocks(){
         return this->stocks;
     }
