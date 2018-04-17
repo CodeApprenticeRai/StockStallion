@@ -37,9 +37,9 @@ int main(void) {
 
         std::string resultBody{};
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resultBody);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, static_cast<size_t (__stdcall *)(char *, size_t, size_t, void *)>(
-                [](char *ptr, size_t size, size_t nmemb, void *resultBody) {
-                    *(static_cast<std::string *>(resultBody)) += std::string{ptr, size * nmemb};
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, static_cast<size_t (__stdcall*)(char*, size_t, size_t, void*)>(
+                [](char* ptr, size_t size, size_t nmemb, void* resultBody){
+                    *(static_cast<std::string*>(resultBody)) += std::string {ptr, size * nmemb};
                     return size * nmemb;
                 }
         ));
@@ -98,47 +98,5 @@ int main(void) {
 
 
     }
-
-
-
-
-
-
-
-    //original
-//    if(curl) {
-//        curl_easy_setopt(curl, CURLOPT_URL, request);
-//        /* example.com is redirected, so we tell libcurl to follow redirection */
-//        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-//
-//        /* Perform the request, res will get the return code */
-//        res = curl_easy_perform(curl);
-//        /* Check for errors */
-//        if(res != CURLE_OK)
-//            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-//                    curl_easy_strerror(res));
-//
-//        //Convert response into a CString to be parsed
-//        CString str(curl_easy_strerror(res));
-//
-//        //Finds the current price of the stock
-//        std::string line;
-//        std::istringstream stream(str);
-//        std::string openingPrice;
-//
-//        while (std::getline(stream, line))
-//        {
-//            if (line.find("1. open\": \"") != -1)
-//            {
-//                openingPrice = line.substr(24, 7);
-//                std::cout << openingPrice << endl;
-//                break;
-//            }
-//        }
-//
-//        /* always cleanup */
-//        curl_easy_cleanup(curl);
-//}
-
     return 0;
 }

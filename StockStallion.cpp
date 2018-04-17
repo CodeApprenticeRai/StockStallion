@@ -34,8 +34,10 @@ void StockStallion::commandLineLoginRegisterView(){
                 if( authorizeLogin() ){
                     return;
                 }
+                break;
             case 2:
                 StockStallion::registerNewUser();
+                break;
             case 3:
                 std::cout << "Thank you for using Stock Stallion!\n\n";
                 exit(0);
@@ -57,7 +59,7 @@ void StockStallion::portfolioView(){
 
         switch(choice){
             case 1:
-                StockStallion::addStock(user->getUsername(), user->getStockList());
+                StockStallion::addStock();
                 break;
             case 2:
                 StockStallion::removeStock();
@@ -177,7 +179,7 @@ bool StockStallion::curlRequest(std::string ticker){
 }
 
 std::string StockStallion::curlRequestPrice(std::string ticker){
-    CURL *curl;
+    CURL *curl = curl_easy_init();
 
     httpLink request;
 
@@ -186,7 +188,6 @@ std::string StockStallion::curlRequestPrice(std::string ticker){
     request.symbol.append(ticker);
 
     std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
-
     if(curl){
         curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
 
@@ -209,7 +210,8 @@ std::string StockStallion::curlRequestPrice(std::string ticker){
         //Finds and returns the current price of the stock
         std::string openingPrice;
 
-        for(int position = 0; position < resultBody.length();){
+
+        for(int position = 0; position < resultBody.length(); ++position){
             if (resultBody.find("1. open\": \"") != -1)
             {
                 position = resultBody.find("1. open\": \"");
@@ -219,17 +221,24 @@ std::string StockStallion::curlRequestPrice(std::string ticker){
                                resultBody.at(position+14) + resultBody.at(position+15) + resultBody.at(position+16)
                                + resultBody.at(position+17);
 
+                /* always cleanup */
+                curl_easy_cleanup(curl);
                 return openingPrice;
             }
         }
 
         /* always cleanup */
         curl_easy_cleanup(curl);
+        return std::string("");
+        /* always cleanup */
+        curl_easy_cleanup(curl);
     }
 }
 
 
-void StockStallion::addStock(std::string username, std::string stocklist){
+void StockStallion::addStock(){
+    std::string username = loggedInAsUser->getUsername();
+
     bool checker = true;
     std::string ticker_symbol;
 
@@ -242,7 +251,7 @@ void StockStallion::addStock(std::string username, std::string stocklist){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
-        else if(curlRequest(ticker_symbol)){
+        if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
@@ -251,19 +260,21 @@ void StockStallion::addStock(std::string username, std::string stocklist){
         }
     }
 
-    stocklist = stocklist + ticker_symbol + ",";
+    this->loggedInAsUser->appendStockList(ticker_symbol);
+    std::string stockList = loggedInAsUser->getStockList();
 
     //adds stock to user profile and db
     // take username as a param, stocklist (the comma separated string version) as a param
-//    Database *db;
-//    db = new Database("stockstallion.db");
-//    std::string _q = std::string("UPDATE users SET stocklist ='") + stocklist + "' WHERE username='" + username + "';";
-//    char *q = &_q[0u];
-//
-//
-//    db->query(q);
+    Database *db;
+    db = new Database("stockstallion.db");
+    std::string _q = std::string("UPDATE users SET stocklist ='") + stockList  + "' WHERE username='" + username + "';";
+    char *q = &_q[0u];
+
+    db->query(q);
 //    delete q;
-//    db->close();
+    db->close();
+
+    return;
 
 
 
@@ -273,7 +284,7 @@ void StockStallion::removeStock(){
 
 };
 void StockStallion::viewStocks(){
-    //uses curlRequestPrice function for each stock object in list then returns the stock and its price
+//
 
 
 
@@ -557,7 +568,7 @@ bool StockStallion::authorizeLogin(){
     if (verified){
         buildUserObject(username);
     }
-    return true;
+    return verified;
 }
 
 void StockStallion::buildUserObject(std::string username){

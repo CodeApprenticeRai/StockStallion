@@ -26,6 +26,8 @@ add_executable(${BUILD_2} ${SOURCE_FILES_2})
 
 set(BUILD_3 curl_test)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -lcurl")
-set(SOURCE_FILES_3 curl/main.cpp)
-target_link_libraries(${BUILD_3} curl/curl)
-add_executable(${BUILD_3} ${SOURCE_FILES_3})
+set(SOURCE_FILES curl/main.cpp)
+add_executable(example ${SOURCE_FILES})
+target_link_libraries(example curl)
+
+add_executable(curltest curl/main.cpp)
