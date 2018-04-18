@@ -25,6 +25,7 @@ class StockStallion {
         bool curlRequest(std::string);
         std::string curlRequestPrice(std::string);
 
+        void currentPrice();
         void addStock();
         void removeStock();
         void viewStocks();

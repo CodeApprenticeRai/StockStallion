@@ -59,15 +59,18 @@ void StockStallion::portfolioView(){
 
         switch(choice){
             case 1:
-                StockStallion::addStock();
+                StockStallion::currentPrice();
                 break;
             case 2:
-                StockStallion::removeStock();
+                StockStallion::addStock();
                 break;
             case 3:
-                viewStocks();
+                StockStallion::removeStock();
                 break;
             case 4:
+                viewStocks();
+                break;
+            case 5:
                 std::cout << "Thank you for using Stock Stallion!\n\n";
                 //saveState();
                 exit(0);
@@ -111,10 +114,11 @@ int StockStallion::loginRegisterPrompt()
 
 int StockStallion::portfolioViewPrompt() {
         std::cout << "\nChoose an option:\n\n";
-        std::cout << "[1]\tAdd a Stock\n";
-        std::cout << "[2]\tRemove a Stock\n";
-        std::cout << "[3]\tView Stock Prices\n";
-        std::cout << "[4]\tExit\n\n";
+        std::cout << "[1]\tView Current Stock Prices\n";
+        std::cout << "[2]\tAdd a Stock\n";
+        std::cout << "[3]\tRemove a Stock\n";
+        std::cout << "[4]\tView Added Stock Prices\n";
+        std::cout << "[5]\tExit\n\n";
         int choice;
         std:cin >> choice;
         bool validChoice;
@@ -209,17 +213,19 @@ std::string StockStallion::curlRequestPrice(std::string ticker){
 
         //Finds and returns the current price of the stock
         std::string openingPrice;
-
+        std::string resultBody2;
+        int position2 = 0;
 
         for(int position = 0; position < resultBody.length(); ++position){
             if (resultBody.find("1. open\": \"") != -1)
             {
                 position = resultBody.find("1. open\": \"");
 
-                openingPrice = resultBody.at(position+11);
-                openingPrice = openingPrice + resultBody.at(position+12) + resultBody.at(position+13) +
-                               resultBody.at(position+14) + resultBody.at(position+15) + resultBody.at(position+16)
-                               + resultBody.at(position+17);
+                resultBody2 = resultBody.substr(position+11, resultBody.length()-1);
+                position2 = resultBody2.find(".");
+
+
+                openingPrice = resultBody2.substr(0,position2+3);
 
                 /* always cleanup */
                 curl_easy_cleanup(curl);
@@ -230,9 +236,39 @@ std::string StockStallion::curlRequestPrice(std::string ticker){
         /* always cleanup */
         curl_easy_cleanup(curl);
         return std::string("");
-        /* always cleanup */
-        curl_easy_cleanup(curl);
     }
+}
+
+//returns the current price of a given stock
+void StockStallion::currentPrice() {
+    bool checker = true;
+    std::string ticker_symbol;
+
+    //error checking for ensuring the stock the user wants to add is valid
+    while(checker){
+        std::cout << "\nEnter the Ticker Symbol of the Stock whose price you would like to check: ";
+        std::cin >> ticker_symbol;
+
+        if (ticker_symbol.length() > 5 ){
+            std::cout <<"\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+        if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
+            std::cout <<"\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+        else{
+            checker = false;
+        }
+    }
+
+    std::string price;
+
+    price = StockStallion::curlRequestPrice(ticker_symbol);
+
+    std::cout << "\nThe current price of " << ticker_symbol << " is: " << price << endl;
+
+
 }
 
 
@@ -284,7 +320,8 @@ void StockStallion::removeStock(){
 
 };
 void StockStallion::viewStocks(){
-//
+std::string username = loggedInAsUser->getUsername();
+
 
 
 
