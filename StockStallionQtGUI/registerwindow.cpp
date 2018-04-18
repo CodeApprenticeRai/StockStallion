@@ -1,5 +1,8 @@
 #include "registerwindow.h"
 #include "ui_registerwindow.h"
+#include "./sqlite/sqlite3.h"
+#include <QtSql>
+#include <QFileInfo>
 #include <QMouseEvent>
 
 RegisterWindow::RegisterWindow(QWidget *parent) :
@@ -112,13 +115,40 @@ void RegisterWindow::on_registerButton_clicked()
         ui->passwordErrorLabel->setStyleSheet("color: red");
         ui->passwordConfirmErrorLabel->setStyleSheet("color: transparent");
     }
+
+    if(checkUsername() && checkEmail() && checkPassword())
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+        db.setDatabaseName("stockstallion.db");
+        if(db.open())
+        {
+            QSqlQuery query;
+            db.exec("CREATE TABLE IF NOT EXISTS users( id INT , username TEXT PRIMARY KEY NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, stocklist TEXT);");
+
+            //Checks if username already exists
+            if(query.exec("select * from users where username='" + ui->usernameTextBox->text() + "' or email='" + ui->emailTextBox->text() + "'"))
+            {
+                int count = 0;
+                while(query.next())
+                {
+                    count++;
+                }
+                if(count == 0)
+                {
+                    db.exec("INSERT into users(username, email, password, stocklist) VALUES('" + ui->usernameTextBox->text() + "','" + ui->emailTextBox->text() + "','" + ui->passwordTextBox->text() + "','NOSTOCKS');");
+                }
+            }
+
+            db.close();
+        }
+    }
 }
 
 bool RegisterWindow::checkUsername()
 {
     QString username = ui->usernameTextBox->text();
     bool containsAlphaNumerics = true;
-    if(username.length() >= 10 && username.length() <= 32)
+    if(username.length() >= 6 && username.length() <= 32)
     {
         for(int i = 0; i < username.size(); i++)
         {
