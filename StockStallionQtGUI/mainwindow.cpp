@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "registerwindow.h"
+#include "stockstallionwindow.h"
+#include <QtSql>
+#include <QFileInfo>
 #include <QMouseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -8,6 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //Setup Database
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("stockstallion.db");
 
     //Make Window transparent and frameless
     Qt::WindowFlags flags = windowFlags();
@@ -96,14 +103,29 @@ void MainWindow::on_loginButton_released()
 void MainWindow::on_loginButton_clicked()
 {
     //Login debug
-    if(ui->usernameTextBox->text() == "Bob" && ui->passwordTextBox->text() == "Pass")
+    QSqlQuery query;
+    if(db.open())
     {
-        this->close();
-    }
-    else
-    {
-        ui->passwordTextBox->setText("");
-        ui->usernameErrorLabel->setStyleSheet("color: red");
+        if(query.exec("select * from users where username='" + ui->usernameTextBox->text() + "' and password='" + ui->passwordTextBox->text() + "'"))
+        {
+            int count = 0;
+            while(query.next())
+            {
+                count++;
+            }
+            if(count == 1)
+            {
+                this->hide();
+                StockStallionWindow *stockStallion = new StockStallionWindow(this);
+                stockStallion->show();
+                db.close();
+            }
+        }
+        else
+        {
+            ui->passwordTextBox->setText("");
+            ui->usernameErrorLabel->setStyleSheet("color: red");
+        }
     }
 }
 

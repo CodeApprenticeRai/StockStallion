@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtSql>
+#include <QFileInfo>
 
 namespace Ui {
 class MainWindow;
@@ -13,6 +15,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    QSqlDatabase db;
     ~MainWindow();
 
 protected:
