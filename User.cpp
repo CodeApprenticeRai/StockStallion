@@ -26,8 +26,8 @@ std::string User::getStockList(){
 }
 
 
-void User::appendStockList(std::string tickerSymbol, std::string priceAt){
-    stockList = stockList + tickerSymbol + " bought at " + priceAt + ",\n";
+void User::appendStockList(std::string tickerSymbol, std::string priceAt, std::string numShares){
+    stockList = stockList + tickerSymbol + " x" + numShares + " bought at " + priceAt + ",\n";
 }
 
 

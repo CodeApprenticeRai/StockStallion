@@ -6,6 +6,7 @@
 #include "User.h"
 #include <curl/curl.h>
 #include <sstream>
+#include <iomanip>
 
 
 
@@ -28,7 +29,7 @@ class StockStallion {
 //        bool curlRequest(std::string);
 		std::string SMA(std::string);
         std::string curlRequestPrice(std::string);
-        double percentChange(int,int);
+        double percentChange(double,double);
 
         void currentPrice();
         void addStock();

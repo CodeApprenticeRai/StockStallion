@@ -348,12 +348,11 @@ void StockStallion::currentPrice() {
 
     std::cout << "\nThe current price of " << ticker_symbol << " is: " << price << endl;
 
-    std::cout << "\nThe average price of " << ticker_symbol << " over the last 30 days is: " << sma << endl;
+    std::cout << "\nThe average price of " << ticker_symbol << " over the last 30 days is: "
+                                                               << setprecision(3) << sma << endl;
 
-    std::cout << ticker_symbol << " Change from Average: " << percentChange(x1, x2) << "%" << endl;
-
-
-
+    std::cout << ticker_symbol << " Change from Average: "
+                                  << setprecision(3) << percentChange(x1, x2) << "%" << endl;
 
 }
 
@@ -392,9 +391,40 @@ void StockStallion::addStock(){
         }
     }
 
+    //mechanics for multiple shares
+    checker = true;
+    std::string numShares;
+
+    while(checker){
+        std::cout << "\nHow many shares of " << ticker_symbol << "would you like to add? " << endl;
+        std::cout << "\n**NOTE: number is capped at 100**" << endl;
+
+        std::cin >> numShares;
+        if(cin.get() == ' '){
+            // allows program to ignore everything after the first space
+            while (cin.get() != '\n')
+            {
+                cin.clear();
+            }
+            cout << "\nInvalid input, try again\n" << endl;
+            checker = true;
+        }
+        else if(stoi(numShares) > 100 || stoi(numShares) <= 0){
+            cout << "\nInvalid quantity, try again\n" << endl;
+            checker = true;
+        }
+        else{
+            checker = false;
+        }
+
+    }
+
+
+
+
     std::string currentPrice = curlRequestPrice(ticker_symbol);
 
-    this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice);
+    this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice, numShares);
     std::string stockList = loggedInAsUser->getStockList();
 
     //adds stock to user profile and db
@@ -448,11 +478,11 @@ void StockStallion::removeStock(){
 };
 
 
-double StockStallion::percentChange(int x1, int x2) {
+double StockStallion::percentChange(double x1, double x2) {
         double change;
         change = x2-x1;
         change /= x1;
-        return change;
+        return 100 * change;
 }
 
 void StockStallion::viewStocks(){
@@ -461,10 +491,10 @@ void StockStallion::viewStocks(){
     double assetGrowth = 0;
 
     int portfolioValue = 0;
-    int intermediate = 0;
+    double intermediate = 0;
 
     double portfolioGrowth = 0;
-    int originalBuy = 0;
+    double originalBuy = 0;
 
     std::istringstream stream(stocks);
     std::string line;
@@ -480,28 +510,40 @@ void StockStallion::viewStocks(){
 
             currentPrice = curlRequestPrice(compName);
 
+            //find number of shares
+            int pos0 = line.find(" x");
+            std:string numOwned = line.substr(pos0+2, line.find(' ')+1);
+            int numShares = stoi(numOwned);
+
+
             //find original buy price
             int pos1 = line.find(" at ");
             std::string firstPrice;
             firstPrice = line.substr(pos1+4, line.find(' ')+1);
-            int intermediate2 = stoi(firstPrice);
+            double intermediate2 = stod(firstPrice) * numShares;
             originalBuy += intermediate2;
 
             //find current portfolio value
-            intermediate = stoi(currentPrice);
+            intermediate = stod(currentPrice) * numShares;
             portfolioValue += intermediate;
 
             //find each stocks change
             assetGrowth = percentChange(intermediate2, intermediate);
 
-            std::cout << line << " Current price is: " << currentPrice << ", Change: " << assetGrowth << "%" << endl;
+            std::cout << line << " Current price is: " << currentPrice << ", Change: " << setprecision(3) << assetGrowth
+                    << "%" << endl;
 
         }
 
         portfolioGrowth = percentChange(portfolioValue, originalBuy);
+        char changeSign;
+
+        if(portfolioGrowth >= 0){
+            changeSign = '+';
+        }
 
         std::cout << "\nTotal Portfolio value is: " << portfolioValue << endl;
-        std::cout << "\nTotal growth of included securities is: " << portfolioGrowth << "%" << endl;
+        std::cout << "\nTotal growth of included securities is: " << changeSign << portfolioGrowth << "%" << endl;
     }
 
 
