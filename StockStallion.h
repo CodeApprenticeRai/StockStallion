@@ -5,6 +5,8 @@
 #include <string>
 #include "User.h"
 #include <curl/curl.h>
+#include <sstream>
+
 
 
 class StockStallion {
@@ -22,7 +24,7 @@ class StockStallion {
 
 
         // User Object Manipulation Functions
-        bool curlRequest(std::string);
+//        bool curlRequest(std::string);
         std::string curlRequestPrice(std::string);
 
         void currentPrice();

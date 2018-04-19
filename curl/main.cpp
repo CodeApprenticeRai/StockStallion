@@ -59,24 +59,16 @@ int main(void) {
             if (resultBody.find("1. open\": \"") != -1) {
                 position = resultBody.find("1. open\": \"");
 
-//                for(int position2 = position; position < resultBody.length(); position2++){
-//                    if(resultBody.at(position2) == '.'){
-//                        break;
-//                    }
-//                    else{
-//                        openingPrice = openingPrice + resultBody.at(position2);
-//                        pos = position2;
-//                    }
-//                }
+//                openingPrice = openingPrice + resultBody.at(pos) + resultBody.at(pos + 1) + resultBody.at(pos + 2);
 //
-                openingPrice = openingPrice + resultBody.at(pos) + resultBody.at(pos + 1) + resultBody.at(pos + 2);
+//                openingPrice = resultBody.at(position + 11);
+//                openingPrice = openingPrice + resultBody.at(position + 12) + resultBody.at(position + 13) +
+//                               resultBody.at(position + 14) + resultBody.at(position + 15) +
+//                               resultBody.at(position + 16)
+//                               + resultBody.at(position + 17);
 
-                openingPrice = resultBody.at(position + 11);
-                openingPrice = openingPrice + resultBody.at(position + 12) + resultBody.at(position + 13) +
-                               resultBody.at(position + 14) + resultBody.at(position + 15) +
-                               resultBody.at(position + 16)
-                               + resultBody.at(position + 17);
 
+                //better price printer in stockstallion.cpp
                 std::cout << "Opening price is: " << openingPrice << endl;
                 break;
             }

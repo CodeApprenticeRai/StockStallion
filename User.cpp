@@ -25,9 +25,11 @@ std::string User::getStockList(){
     return this->stockList;
 }
 
-void User::appendStockList(std::string tickerSymbol){
-    stockList = stockList + tickerSymbol + ",";
+
+void User::appendStockList(std::string tickerSymbol, std::string priceAt){
+    stockList = stockList + tickerSymbol + " bought at " + priceAt + ",\n";
 }
+
 
 std::vector<Stock>* User::getStocks() {
     return this->portfolios.at(0).getStocks();

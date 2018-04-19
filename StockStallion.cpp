@@ -71,6 +71,7 @@ void StockStallion::portfolioView(){
                 viewStocks();
                 break;
             case 5:
+                //TODO: not able to exit via '5'
                 std::cout << "Thank you for using Stock Stallion!\n\n";
                 //saveState();
                 exit(0);
@@ -102,7 +103,7 @@ int StockStallion::loginRegisterPrompt()
   validChoice = verifyChoiceInRange(choice, 3);
   //std::cout << validChoice;
   while( (std::cin.fail()) or !validChoice ) {
-      std::cout << "Enter an integer in range 1-2.\n";
+      std::cout << "Enter an integer in range 1-3.\n";
       std::cin.clear();
       std::cin.ignore(256, '\n');
       std::cout << "Choice: ";
@@ -117,7 +118,7 @@ int StockStallion::portfolioViewPrompt() {
         std::cout << "[1]\tView Current Stock Prices\n";
         std::cout << "[2]\tAdd a Stock\n";
         std::cout << "[3]\tRemove a Stock\n";
-        std::cout << "[4]\tView Added Stock Prices\n";
+        std::cout << "[4]\tView Added Stocks\n";
         std::cout << "[5]\tExit\n\n";
         int choice;
         std:cin >> choice;
@@ -127,7 +128,7 @@ int StockStallion::portfolioViewPrompt() {
         validChoice = verifyChoiceInRange(choice, 4);
         //std::cout << validChoice;
         while( (std::cin.fail()) or !validChoice ) {
-            std::cout << "Enter an integer in range 1-2.\n";
+            std::cout << "Enter an integer in range 1-5.\n";
             std::cin.clear();
             std::cin.ignore(256, '\n');
             std::cout << "Choice: ";
@@ -152,35 +153,35 @@ struct httpLink {
 };
 
 //checks if the curl request can be made for the given user input
-bool StockStallion::curlRequest(std::string ticker){
-    CURL *curl;
-
-    httpLink request;
-
-    request.symbol.append(ticker);
-
-    std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
-
-    if(curl){
-        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
-        CURLcode curlResult = curl_easy_perform(curl);
-
-        /* always cleanup */
-        curl_easy_cleanup(curl);
-
-        if(curlResult !=CURLE_OK){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
-    else{
-        return false;
-    }
-
-
-}
+//bool StockStallion::curlRequest(std::string ticker){
+//    CURL *curl;
+//
+//    httpLink request;
+//
+//    request.symbol.append(ticker);
+//
+//    std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
+//
+//    if(curl){
+//        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
+//        CURLcode curlResult = curl_easy_perform(curl);
+//
+//        /* always cleanup */
+//        curl_easy_cleanup(curl);
+//
+//        if(curlResult !=CURLE_OK){
+//            return false;
+//        }
+//        else{
+//            return true;
+//        }
+//    }
+//    else{
+//        return false;
+//    }
+//
+//
+//}
 
 std::string StockStallion::curlRequestPrice(std::string ticker){
     CURL *curl = curl_easy_init();
@@ -249,11 +250,22 @@ void StockStallion::currentPrice() {
         std::cout << "\nEnter the Ticker Symbol of the Stock whose price you would like to check: ";
         std::cin >> ticker_symbol;
 
-        if (ticker_symbol.length() > 5 ){
+        //dealing with bad input
+        if(cin.get() == ' '){
+            // allows program to ignore everything after the first space
+            while (cin.get() != '\n')
+            {
+                cin.clear();
+            }
+            cout << "\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+
+        else if (ticker_symbol.length() > 5 ){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
-        if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
+        else if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
@@ -261,6 +273,7 @@ void StockStallion::currentPrice() {
             checker = false;
         }
     }
+
 
     std::string price;
 
@@ -283,11 +296,21 @@ void StockStallion::addStock(){
         std::cout << "\nEnter the Ticker Symbol You Would Like to Add: ";
         std::cin >> ticker_symbol;
 
-        if (ticker_symbol.length() > 5 ){
+        //dealing with bad input
+        if(cin.get() == ' '){
+            // allows program to ignore everything after the first space
+            while (cin.get() != '\n')
+            {
+                cin.clear();
+            }
+            cout << "\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+        else if (ticker_symbol.length() > 5 ){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
-        if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
+        else if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
             std::cout <<"\nInvalid symbol, try again\n" << endl;
             checker = true;
         }
@@ -296,7 +319,9 @@ void StockStallion::addStock(){
         }
     }
 
-    this->loggedInAsUser->appendStockList(ticker_symbol);
+    std::string currentPrice = curlRequestPrice(ticker_symbol);
+
+    this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice);
     std::string stockList = loggedInAsUser->getStockList();
 
     //adds stock to user profile and db
@@ -316,13 +341,56 @@ void StockStallion::addStock(){
 
 };
 void StockStallion::removeStock(){
+    std::string ticker_symbol;
+    std::string stocks = loggedInAsUser->getStockList();
+    bool checker = true;
+
+    //error catching
+    while(checker){
+        std::cout << "Enter the ticker symbol of the stock you would like to remove: ";
+        std:: cin >> ticker_symbol;
+
+        if(cin.get() == ' '){
+            // allows program to ignore everything after the first space
+            while (cin.get() != '\n')
+            {
+                cin.clear();
+            }
+            cout << "\nInvalid symbol, try again\n" << endl;
+            checker = true;
+        }
+
+        else if(stocks.find(ticker_symbol) == -1){
+            std::cout << "\nNot in your portfolio, try again\n" << endl;
+            checker = true;
+        }
+        else{
+            checker = false;
+        }
+    }
+
+    //function to remove a specific stock and its data from the string stocks
 
 
 };
+
 void StockStallion::viewStocks(){
-std::string username = loggedInAsUser->getUsername();
+    std::string stocks = loggedInAsUser->getStockList();
+    std::string currentPrice = "0";
 
+    std::istringstream stream(stocks);
+    std::string line;
 
+    while(std::getline(stream, line)){
+        std::string next;
+        char until(' ');
+        next = line.substr(0, line.find(until));
+
+        currentPrice = curlRequestPrice(next);
+
+        cout << line << " Current price is: " << currentPrice << endl;
+    }
+    
 
 
 };

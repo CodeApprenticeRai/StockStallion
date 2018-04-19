@@ -22,7 +22,7 @@ class User {
         User(std::string username, std::string stockList);
         std::string getUsername();
         std::string getStockList();
-        void appendStockList(std::string tickerSymbol);
+        void appendStockList(std::string tickerSymbol, std::string priceAt);
         std::vector<Stock>* getStocks();
 //        void addMoney(double money);
 //        void removeMoney(double money);
