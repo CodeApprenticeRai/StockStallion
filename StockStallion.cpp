@@ -115,10 +115,10 @@ int StockStallion::loginRegisterPrompt()
 
 int StockStallion::portfolioViewPrompt() {
         std::cout << "\nChoose an option:\n\n";
-        std::cout << "[1]\tView Current Stock Prices\n";
+        std::cout << "[1]\tView Current Stock Prices and its indicators\n";
         std::cout << "[2]\tAdd a Stock\n";
         std::cout << "[3]\tRemove a Stock\n";
-        std::cout << "[4]\tView Added Stocks\n";
+        std::cout << "[4]\tView Portfolio\n";
         std::cout << "[5]\tExit\n\n";
         int choice;
         std:cin >> choice;
@@ -182,6 +182,68 @@ struct httpLink {
 //
 //
 //}
+
+std::string StockStallion::SMA(std::string ticker){
+    CURL *curl = curl_easy_init();
+
+    httpLink request;
+
+    request.function = "function=SMA";
+    request.interval = "interval=daily";
+
+
+    request.symbol.append(ticker);
+
+    std::string req = request.base + request.function + "&" + request.symbol + "&" +
+                      request.interval + "&" + "time_period=30" + "&series_type=close&" + request.api_key;
+    if(curl){
+        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
+
+        std::string resultBody { };
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resultBody);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, static_cast<size_t (__stdcall*)(char*, size_t, size_t, void*)>(
+                [](char* ptr, size_t size, size_t nmemb, void* resultBody){
+                    *(static_cast<std::string*>(resultBody)) += std::string {ptr, size * nmemb};
+                    return size * nmemb;
+                }
+        ));
+
+        CURLcode curlResult = curl_easy_perform(curl);
+
+        if(curlResult !=CURLE_OK){
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(curlResult));
+        }
+
+        //finds ands returns recent sma
+        std::string SMA;
+        std::string resultBody2;
+        int position2 = 0;
+
+        for(int position = 0; position < resultBody.length(); position++){
+            if(resultBody.find("\"SMA\": \"") != -1){
+                position = resultBody.find("\"SMA\": \"");
+
+                resultBody2 = resultBody.substr(position+8, resultBody.length()-1);
+                position2 = resultBody2.find(".");
+
+                SMA = resultBody2.substr(0,position2+3);
+
+                /* always cleanup */
+                curl_easy_cleanup(curl);
+                return SMA;
+            }
+        }
+
+        curl_easy_cleanup(curl);
+    }
+
+
+
+}
+
+
+
 
 std::string StockStallion::curlRequestPrice(std::string ticker){
     CURL *curl = curl_easy_init();
@@ -276,10 +338,21 @@ void StockStallion::currentPrice() {
 
 
     std::string price;
+    std::string sma;
 
     price = StockStallion::curlRequestPrice(ticker_symbol);
+    sma = StockStallion::SMA(ticker_symbol);
+
+    int x1 = stoi(sma);
+    int x2 = stoi(price);
 
     std::cout << "\nThe current price of " << ticker_symbol << " is: " << price << endl;
+
+    std::cout << "\nThe average price of " << ticker_symbol << " over the last 30 days is: " << sma << endl;
+
+    std::cout << ticker_symbol << " Change from Average: " << percentChange(x1, x2) << "%" << endl;
+
+
 
 
 }
@@ -374,23 +447,64 @@ void StockStallion::removeStock(){
 
 };
 
+
+double StockStallion::percentChange(int x1, int x2) {
+        double change;
+        change = x2-x1;
+        change /= x1;
+        return change;
+}
+
 void StockStallion::viewStocks(){
     std::string stocks = loggedInAsUser->getStockList();
-    std::string currentPrice = "0";
+    std::string currentPrice = "failed";
+    double assetGrowth = 0;
+
+    int portfolioValue = 0;
+    int intermediate = 0;
+
+    double portfolioGrowth = 0;
+    int originalBuy = 0;
 
     std::istringstream stream(stocks);
     std::string line;
 
-    while(std::getline(stream, line)){
-        std::string next;
-        char until(' ');
-        next = line.substr(0, line.find(until));
-
-        currentPrice = curlRequestPrice(next);
-
-        cout << line << " Current price is: " << currentPrice << endl;
+    if(stocks == ""){
+        std::cout << "Portfolio is currently empty" << endl;
     }
-    
+    else{
+        while(std::getline(stream, line)){
+            std::string compName;
+            char until(' ');
+            compName = line.substr(0, line.find(until));
+
+            currentPrice = curlRequestPrice(compName);
+
+            //find original buy price
+            int pos1 = line.find(" at ");
+            std::string firstPrice;
+            firstPrice = line.substr(pos1+4, line.find(' ')+1);
+            int intermediate2 = stoi(firstPrice);
+            originalBuy += intermediate2;
+
+            //find current portfolio value
+            intermediate = stoi(currentPrice);
+            portfolioValue += intermediate;
+
+            //find each stocks change
+            assetGrowth = percentChange(intermediate2, intermediate);
+
+            std::cout << line << " Current price is: " << currentPrice << ", Change: " << assetGrowth << "%" << endl;
+
+        }
+
+        portfolioGrowth = percentChange(portfolioValue, originalBuy);
+
+        std::cout << "\nTotal Portfolio value is: " << portfolioValue << endl;
+        std::cout << "\nTotal growth of included securities is: " << portfolioGrowth << "%" << endl;
+    }
+
+
 
 
 };

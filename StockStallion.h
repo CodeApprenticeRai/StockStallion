@@ -9,6 +9,7 @@
 
 
 
+
 class StockStallion {
 	public:
 		StockStallion();
@@ -25,7 +26,9 @@ class StockStallion {
 
         // User Object Manipulation Functions
 //        bool curlRequest(std::string);
+		std::string SMA(std::string);
         std::string curlRequestPrice(std::string);
+        double percentChange(int,int);
 
         void currentPrice();
         void addStock();
