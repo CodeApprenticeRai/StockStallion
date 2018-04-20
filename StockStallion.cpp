@@ -151,36 +151,6 @@ struct httpLink {
 
 };
 
-//checks if the curl request can be made for the given user input
-//bool StockStallion::curlRequest(std::string ticker){
-//    CURL *curl;
-//
-//    httpLink request;
-//
-//    request.symbol.append(ticker);
-//
-//    std::string req = request.base + request.function + "&" + request.symbol + "&" + request.interval + "&" + request.api_key;
-//
-//    if(curl){
-//        curl_easy_setopt(curl, CURLOPT_URL, req.c_str());
-//        CURLcode curlResult = curl_easy_perform(curl);
-//
-//        /* always cleanup */
-//        curl_easy_cleanup(curl);
-//
-//        if(curlResult !=CURLE_OK){
-//            return false;
-//        }
-//        else{
-//            return true;
-//        }
-//    }
-//    else{
-//        return false;
-//    }
-//
-//
-//}
 
 std::string StockStallion::SMA(std::string ticker){
     CURL *curl = curl_easy_init();
@@ -376,7 +346,7 @@ void StockStallion::addStock(){
             checker = true;
         }
         else if( (std::string("") == curlRequestPrice(ticker_symbol)) ){
-            std::cout <<"\nInvalid symbol, try again\n" << endl;
+            std::cout <<"\nCould not complete request, try again\n" << endl;
             checker = true;
         }
         else{
@@ -384,9 +354,10 @@ void StockStallion::addStock(){
         }
     }
 
-    //mechanics for multiple shares
+    //mechanics for adding multiple shares
     checker = true;
     std::string numShares;
+    bool check = false;
 
     while(checker){
         std::cout << "\n**NOTE: number of shares for one add is capped at 100**" << endl;
@@ -402,6 +373,7 @@ void StockStallion::addStock(){
             cout << "\nInvalid input, try again\n" << endl;
             checker = true;
         }
+        //ensures that the number of shares being added is valid
         else if(stoi(numShares) > 100 || stoi(numShares) == 0){
             cout << "\nInvalid quantity, try again\n" << endl;
             checker = true;
@@ -416,8 +388,16 @@ void StockStallion::addStock(){
 
     }
 
-    //into db
+    //put string of ticker symbols, the price they were bought at, and the number of shares into the database
     std::string currentPrice = curlRequestPrice(ticker_symbol);
+    if(currentPrice == ""){
+        currentPrice = curlRequestPrice(ticker_symbol);
+        if(currentPrice == ""){
+            std::cout << "\n ERROR: bad timing, try request again" << endl;
+            return;
+        }
+    }
+
 
     this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice, numShares);
     std::string stockList = loggedInAsUser->getStockList();
@@ -436,6 +416,7 @@ void StockStallion::addStock(){
     return;
 };
 
+//menu for yes or no with error catching
 int StockStallion::yesNoMenu(){
     std::cout << "[1]\tYes\n";
     std::cout << "[2]\tNo\n";
@@ -446,7 +427,6 @@ int StockStallion::yesNoMenu(){
 
     //valdiate input
     validChoice = verifyChoiceInRange(choice, 2);
-    //std::cout << validChoice;
     while( (std::cin.fail()) or !validChoice ) {
         std::cout << "Enter an integer in range 1-2.\n";
         std::cin.clear();
@@ -459,7 +439,7 @@ int StockStallion::yesNoMenu(){
     return choice;
 }
 
-
+//talks with user to remove a certain number of shares from a particular purchase
 void StockStallion::removeStock(){
     std::string ticker_symbol;
     std::string stocks = loggedInAsUser->getStockList();
@@ -500,6 +480,7 @@ void StockStallion::removeStock(){
     std::string firstPrice;
     std::istringstream stream(stocks);
     std::string line;
+    bool repeated = false;
 
     while(std::getline(stream, line)){
         //find name
@@ -508,13 +489,17 @@ void StockStallion::removeStock(){
         compName = line.substr(0, line.find(until));
 
         if(compName == ticker_symbol){
+            if(repeated){
+                std::cout << "\nOther additions of " << ticker_symbol <<  " were found" << endl;
+            }
+
             //find price bought at
             int pos1 = line.find(" at ");
-            firstPrice = line.substr(pos1+4, line.find(' ')+1 - pos1+4);
+            firstPrice = line.substr(pos1+4, (line.find(' ')+1 - pos1+4));
 
             //find original numShares
             int pos0 = line.find(" x");
-            std:string numOwned = line.substr(pos0+2, line.find(' ')+1 - pos0+2);
+            std:string numOwned = line.substr(pos0+2, (line.find(' ')+1 - pos0+2));
             numShares = stoi(numOwned);
 
             std::cout << "\nYou bought " << numShares << " shares of " << ticker_symbol << " at " << firstPrice << endl;
@@ -528,6 +513,7 @@ void StockStallion::removeStock(){
             }
             else{
                 progression = false;
+                repeated = true;
                 std::cout << "\nChecking for other purchases of: " << ticker_symbol << endl;
             }
 
@@ -592,7 +578,7 @@ void StockStallion::removeStock(){
 
 };
 
-
+//calculates the percent change between two inputs
 double StockStallion::percentChange(double original, double updated) {
         double change;
         change = updated-original;
@@ -600,9 +586,10 @@ double StockStallion::percentChange(double original, double updated) {
         return 100 * change;
 }
 
-
+//prints out portfolio
 void StockStallion::viewStocks(){
     std::string stocks = loggedInAsUser->getStockList();
+    std::string username = loggedInAsUser->getUsername();
     std::string currentPrice = "failed";
     double assetGrowth = 0;
 
@@ -619,25 +606,44 @@ void StockStallion::viewStocks(){
         std::cout << "Portfolio is currently empty" << endl;
     }
     else{
+        std::cout << "\n" << username << "'s portfolio: \n" << endl;
+
         while(std::getline(stream, line)){
             std::string compName;
             char until(' ');
             compName = line.substr(0, line.find(until));
+            bool check = false;
 
             currentPrice = curlRequestPrice(compName);
 
+            //error catching
+            if(currentPrice == ""){
+                currentPrice = curlRequestPrice(compName);
+                if(currentPrice == ""){
+                    std::cout << "\n ERROR: bad timing, try request again" << endl;
+                    check =  true;
+                    break;
+                }
+            }
+
+            if(check){
+                break;
+            }
+
             //find number of shares
             int pos0 = line.find(" x");
-            std::string numOwned = line.substr(pos0+2, line.find(' ')+1 - pos0+2);
+            std::string numOwned = line.substr(pos0+2, (line.find(' ') - pos0+2));
             int numShares = stoi(numOwned);
 
 
             //find original buy price
             int pos1 = line.find(" at ");
             std::string firstPrice;
-            firstPrice = line.substr(pos1+4, line.find(' ')+1 - pos1+4);
+            firstPrice = line.substr(pos1+4, (line.find(' ') - pos1+4));
+
             double intermediate2 = stod(firstPrice) * numShares;
             originalBuy += intermediate2;
+
 
             //find current portfolio value
             intermediate = stod(currentPrice) * numShares;
@@ -646,11 +652,54 @@ void StockStallion::viewStocks(){
             //find each stocks change
             assetGrowth = percentChange((intermediate2 /numShares), (intermediate/numShares));
 
+
             //print out data
             std::cout << fixed;
             std::cout << line << " Current price is: " << currentPrice << setprecision(2)
                       << ", Total Current Value: $" << intermediate <<", Change: "  << assetGrowth << "%" << endl;
 
+        }
+
+        std::istringstream stream2(stocks);
+        std::string line2;
+        double currentPrice0 = 0;
+
+        std::cout << "\n Composition: \n"<< endl;
+
+        while(std::getline(stream2, line2)){
+            std::string compName;
+            char until(' ');
+            compName = line2.substr(0, line2.find(until));
+            bool check =  false;
+
+            currentPrice = curlRequestPrice(compName);
+
+            //error catching
+            if(currentPrice == ""){
+                currentPrice = curlRequestPrice(compName);
+                if(currentPrice == ""){
+                    std::cout << "\n ERROR: bad timing, try request again" << endl;
+                    check = true;
+                    break;
+                }
+            }
+            if(check){
+                break;
+            }
+
+            currentPrice0 = stod(currentPrice);
+
+            //find number of shares
+            int pos0 = line2.find(" x");
+            std::string numOwned = line2.substr(pos0+2, (line2.find(' ')+1 - pos0+2));
+            int numShares = stoi(numOwned);
+
+            double percentMakeup;
+
+            percentMakeup = 100 * currentPrice0 * numShares / portfolioValue;
+
+            std::cout << fixed;
+            std::cout << compName << " x" << numShares << " investment: " << percentMakeup << "% of portfolio" << endl;
         }
 
 

@@ -81,8 +81,6 @@ void User::removeFromStockList(std::string tickerSymbol, std::string priceAt, st
     }
 
     stockList = temp;
-
-
 }
 
 
