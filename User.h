@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include "Portfolio.h"
+#include <sstream>
 
 class User {
     private:
@@ -22,7 +23,8 @@ class User {
         User(std::string username, std::string stockList);
         std::string getUsername();
         std::string getStockList();
-        void appendStockList(std::string tickerSymbol);
+        void appendStockList(std::string tickerSymbol, std::string priceAt, std::string numShares);
+        void removeFromStockList(std::string, std::string priceAt, std::string numOwned, int numToRemove);
         std::vector<Stock>* getStocks();
 //        void addMoney(double money);
 //        void removeMoney(double money);
