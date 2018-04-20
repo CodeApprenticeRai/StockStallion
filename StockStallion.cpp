@@ -356,7 +356,7 @@ void StockStallion::addStock(){
 
     //mechanics for adding multiple shares
     checker = true;
-    std::string numShares;
+    int numShares = 0;
     bool check = false;
 
     while(checker){
@@ -364,26 +364,38 @@ void StockStallion::addStock(){
         std::cout << "\nHow many shares of " << ticker_symbol << " would you like to add? " << endl;
 
         std::cin >> numShares;
+
+        //dealing with bad input
         if(cin.get() == ' '){
             // allows program to ignore everything after the first space
             while (cin.get() != '\n')
             {
-                cin.clear();
+                std::cin.clear();
             }
-            cout << "\nInvalid input, try again\n" << endl;
-            checker = true;
+            cout << "\nInvalid symbol, try again\n" << endl;
+            return;
         }
-        //ensures that the number of shares being added is valid
-        else if(stoi(numShares) > 100 || stoi(numShares) == 0){
-            cout << "\nInvalid quantity, try again\n" << endl;
-            checker = true;
+
+        bool validChoice;
+
+        validChoice = verifyChoiceInRange(numShares, 100);
+        while( (std::cin.fail()) or !validChoice ) {
+            checker =  true;
+            std::cout << "\nInvalid input, try again" << endl;
+            if(numShares == 0){
+                std::cout << "\nNo shares of " << ticker_symbol << " were added" << endl;
+                checker = false;
+                return;
+            }
+            std::cin.clear();
+            std::cin.ignore(256, '\n');
+            std::cout << "\nEnter a number between 0 and 100: ";
+            std::cin >> numShares;
+            validChoice = verifyChoiceInRange(numShares, 100);
         }
-        else if(stoi(numShares) < 0){
-            cout << "\nShort position not allowed, try again\n" << endl;
-            checker = true;
-        }
-        else{
-            checker = false;
+
+        if(validChoice){
+            checker =  false;
         }
 
     }
@@ -391,27 +403,27 @@ void StockStallion::addStock(){
     //put string of ticker symbols, the price they were bought at, and the number of shares into the database
     std::string currentPrice = curlRequestPrice(ticker_symbol);
     if(currentPrice == ""){
-        currentPrice = curlRequestPrice(ticker_symbol);
-        if(currentPrice == ""){
-            std::cout << "\n ERROR: bad timing, try request again" << endl;
-            return;
+        while(currentPrice == ""){
+            currentPrice = curlRequestPrice(ticker_symbol);
         }
     }
 
+    if(numShares > 0){
+        this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice, std::to_string(numShares));
+        std::string stockList = loggedInAsUser->getStockList();
 
-    this->loggedInAsUser->appendStockList(ticker_symbol, currentPrice, numShares);
-    std::string stockList = loggedInAsUser->getStockList();
+        //adds stock to user profile and db
+        // take username as a param, stocklist (the comma separated string version) as a param
+        Database *db;
+        db = new Database("stockstallion.db");
+        std::string _q = std::string("UPDATE users SET stocklist ='") + stockList  + "' WHERE username='" + username + "';";
+        char *q = &_q[0u];
 
-    //adds stock to user profile and db
-    // take username as a param, stocklist (the comma separated string version) as a param
-    Database *db;
-    db = new Database("stockstallion.db");
-    std::string _q = std::string("UPDATE users SET stocklist ='") + stockList  + "' WHERE username='" + username + "';";
-    char *q = &_q[0u];
-
-    db->query(q);
+        db->query(q);
 //    delete q;
-    db->close();
+        db->close();
+    }
+
 
     return;
 };
@@ -424,6 +436,7 @@ int StockStallion::yesNoMenu(){
     int choice;
     std:cin >> choice;
     bool validChoice;
+
 
     //valdiate input
     validChoice = verifyChoiceInRange(choice, 2);
@@ -462,7 +475,8 @@ void StockStallion::removeStock(){
             // allows program to ignore everything after the first space
             while (cin.get() != '\n')
             {
-                cin.clear();
+                std::cin.clear();
+                std::cin.ignore(256, '\n');
             }
             cout << "\nInvalid symbol, try again\n" << endl;
             checker = true;
@@ -529,48 +543,47 @@ void StockStallion::removeStock(){
                       << " bought at " << firstPrice << " you would like to remove " << endl;
             std::cin >> numSharesToRemove;
 
-            if(cin.get() == ' '){
-                // allows program to ignore everything after the first space
-                while (cin.get() != '\n')
-                {
-                    cin.clear();
+            bool validChoice;
+
+            validChoice = verifyChoiceInRange(numSharesToRemove, numShares);
+            while( (std::cin.fail()) or !validChoice ) {
+                checker =  true;
+                std::cout << "\nInvalid input, try again" << endl;
+                if(numShares == 0){
+                    std::cout << "\nNo shares of " << ticker_symbol << " were removed" << endl;
+                    return;
                 }
-                cout << "\nInvalid symbol, try again\n" << endl;
-                checker = true;
-            }
-            else if(std::cin.fail()){
-                cout << "\nInvalid symbol, try again\n" << endl;
-                checker = true;
-            }
-            else if(numSharesToRemove > numShares){
-                cout << "\nYou only own " << numShares << ", try to remove fewer\n" << endl;
-                checker = true;
-            }
-            else if(numSharesToRemove <= 0){
-                cout << "\nInvalid removal, try again\n" << endl;
-                checker = true;
-            }
-            else{
-                checker = false;
+                std::cin.clear();
+                std::cin.ignore(256, '\n');
+                std::cout << "\nEnter a number between 0 and "<< numShares << ": ";
+                std::cin >> numShares;
+                validChoice = verifyChoiceInRange(numSharesToRemove, numShares);
             }
 
+            if(validChoice){
+                checker =  false;
+            }
 
         }
 
-        this->loggedInAsUser->removeFromStockList(ticker_symbol, firstPrice, std::to_string(numShares), numSharesToRemove);
-        std::string stockList = loggedInAsUser->getStockList();
+            if(numSharesToRemove > 0){
+                this->loggedInAsUser->removeFromStockList(ticker_symbol, firstPrice, std::to_string(numShares), numSharesToRemove);
+                std::string stockList = loggedInAsUser->getStockList();
 
-        std::string username = loggedInAsUser->getUsername();
+                std::string username = loggedInAsUser->getUsername();
 
-        //updates stocklist attached to user profile and db
-        // take username as a param, stocklist (the comma separated string version) as a param
-        Database *db;
-        db = new Database("stockstallion.db");
-        std::string _q = std::string("UPDATE users SET stocklist ='") + stockList  + "' WHERE username='" + username + "';";
-        char *q = &_q[0u];
+                //updates stocklist attached to user profile and db
+                // take username as a param, stocklist (the comma separated string version) as a param
+                Database *db;
+                db = new Database("stockstallion.db");
+                std::string _q = std::string("UPDATE users SET stocklist ='") + stockList  + "' WHERE username='" + username + "';";
+                char *q = &_q[0u];
 
-        db->query(q);
-        db->close();
+                db->query(q);
+                db->close();
+
+            }
+
     }
     else{
         return;
@@ -612,22 +625,14 @@ void StockStallion::viewStocks(){
             std::string compName;
             char until(' ');
             compName = line.substr(0, line.find(until));
-            bool check = false;
 
             currentPrice = curlRequestPrice(compName);
 
             //error catching
             if(currentPrice == ""){
-                currentPrice = curlRequestPrice(compName);
-                if(currentPrice == ""){
-                    std::cout << "\n ERROR: bad timing, try request again" << endl;
-                    check =  true;
-                    break;
+                while(currentPrice == ""){
+                    currentPrice = curlRequestPrice(compName);
                 }
-            }
-
-            if(check){
-                break;
             }
 
             //find number of shares
@@ -670,21 +675,14 @@ void StockStallion::viewStocks(){
             std::string compName;
             char until(' ');
             compName = line2.substr(0, line2.find(until));
-            bool check =  false;
 
             currentPrice = curlRequestPrice(compName);
 
             //error catching
             if(currentPrice == ""){
-                currentPrice = curlRequestPrice(compName);
-                if(currentPrice == ""){
-                    std::cout << "\n ERROR: bad timing, try request again" << endl;
-                    check = true;
-                    break;
+                while(currentPrice == ""){
+                    currentPrice = curlRequestPrice(compName);
                 }
-            }
-            if(check){
-                break;
             }
 
             currentPrice0 = stod(currentPrice);
