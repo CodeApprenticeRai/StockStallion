@@ -30,6 +30,7 @@ class StockStallion {
 		std::string SMA(std::string);
         std::string curlRequestPrice(std::string);
         double percentChange(double,double);
+        int yesNoMenu();
 
         void currentPrice();
         void addStock();
