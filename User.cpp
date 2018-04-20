@@ -90,8 +90,3 @@ std::vector<Stock>* User::getStocks() {
 
 
 
-//    this->password = password;
-//    this->email = email;
-//    this->balance = balance;
-
-

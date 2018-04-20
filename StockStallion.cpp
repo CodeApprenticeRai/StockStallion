@@ -669,42 +669,6 @@ void StockStallion::viewStocks(){
 
         }
 
-//        std::istringstream stream2(stocks);
-//        std::string line2;
-//        double currentPrice0 = 0;
-//
-//        std::cout << "\n Composition: \n"<< endl;
-//
-//        while(std::getline(stream2, line2)){
-//            std::string compName;
-//            char until(' ');
-//            compName = line2.substr(0, line2.find(until));
-//
-//            currentPrice = curlRequestPrice(compName);
-//
-//            //error catching
-//            if(currentPrice == ""){
-//                while(currentPrice == ""){
-//                    currentPrice = curlRequestPrice(compName);
-//                }
-//            }
-//
-//            currentPrice0 = stod(currentPrice);
-//
-//            //find number of shares
-//            int pos0 = line2.find(" x");
-//            std::string numOwned = line2.substr(pos0+2, (line2.find(' ')+1 - pos0+2));
-//            int numShares = stoi(numOwned);
-//
-//            double percentMakeup;
-//
-//            percentMakeup = 100 * currentPrice0 * numShares / portfolioValue;
-//
-//            std::cout << fixed;
-//            std::cout << compName << " x" << numShares << " investment: " << percentMakeup << "% of portfolio" << endl;
-//        }
-
-
         portfolioGrowth = percentChange(originalBuy, portfolioValue);
         char changeSign;
 
@@ -731,53 +695,6 @@ void StockStallion::viewStocks(){
 
 // ################# DATABASE INTERFACE FUNCTIONS #################
 
-// static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-//    int i;
-//    for(i = 0; i<argc; i++) {
-//       printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-//    }
-//    printf("\n");
-//    return 0;
-// }
-// Create database when the app runs if it doesn't already exist.
-// Test the connection to the db if it does exist.
-// void StockStallion::initializeDB(){
-//   sqlite3 *db;
-//   char *zErrMsg = 0;
-//   const char *sql;
-//   int rc;
-//    sqlite3_stmt *statement;
-//
-//    rc = sqlite3_open("stockstallion.db", &db);
-//
-//   if( rc ){
-//     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db) );
-//     return;
-//   } else {
-//     fprintf(stdout, "Opened database successfully\n");
-//
-//   }
-//
-//   sql = "CREATE TABLE IF NOT EXITS users(" \
-//         "id       INT PRIMARY KEY   NOT NULL," \
-//         "username TEXT              NOT NULL" \
-//         "password TEXT              NOT NULL);";
-//
-//   rc = sqlite3_prepare_v2(db, sql, -1, &statement, 0);
-////    sqlite3_prepare_v2(database, query, -1, &statement, 0);
-//   if( rc != SQLITE_OK ){
-//     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//        sqlite3_free(zErrMsg);
-//     } else {
-//       sqlite3_step(statement);
-//       sqlite3_finalize(statement);
-//       fprintf(stdout, "Table created successfully\n");
-//
-//     }
-//
-//   sqlite3_close(db);
-//   return;
-// }
 
 void StockStallion::initializeDB(){
     Database *db;
@@ -788,36 +705,6 @@ void StockStallion::initializeDB(){
     db->close();
 }
 
-void StockStallion::saveState(){};
-// void StockStallion::addUserToDB(std::string username, std::string password){
-//   sqlite3 *db;
-//   char *zErrMsg = 0;
-//   const char *sql;
-//   int rc;
-//
-//   rc = sqlite3_open("stockstallion.db", &db);
-//
-//   if( rc ){
-//     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db) );
-//     return;
-//   } else {
-//     fprintf(stdout, "Opened database successfully\n");
-//   }
-//
-//   std::string insertUser = std::string("VALUES (") + "'" + username + "'"  + "," + "'" + password + "');";
-//
-//   sql = ("INSERT INTO users(username,password) " + insertUser).c_str();
-//
-//   rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-//   if( rc != SQLITE_OK ){
-//     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//        sqlite3_free(zErrMsg);
-//     } else {
-//        fprintf(stdout, "Table created successfully\n");
-//     }
-//   sqlite3_close(db);
-//   return;
-// }
 void StockStallion::addUserToDB(std::string username, std::string password) {
     Database *db;
     db = new Database("stockstallion.db");
@@ -856,55 +743,9 @@ bool StockStallion::verifyLogin(std::string username, std::string password) {
                 return true;
             }
         }
-//        std::vector<std::string> user_vector = result.at(0);
-//        return;
         }
     }
 
-// void StockStallion::verifyLogin(std::string username, std::string password){
-//     sqlite3 *db;
-//     char *zErrMsg = 0;
-//
-//     const char *zSql; /* SQL statement, UTF-8 encoded */
-//     sqlite3_stmt **ppStmt; /* OUT: Statement handle */
-//
-//     int rc;
-//     char *sql;
-//     const char* data = "Callback function called";
-//
-//     /* Open database */
-//     rc = sqlite3_open("stockstallion.db", &db);
-//
-//     if( rc ) {
-//         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-//         return;
-//     } else {
-//         fprintf(stderr, "Opened database successfully\n");
-//     }
-//
-//     std::vector< std::vector < std:: string > > result;
-//     for( int i = 0; i < 2; i++ )
-//         result.push_back(std::vector< std::string >());
-//
-//
-//     /* Create SQL statement */
-//     zSql = "SELECT * from users";
-//
-////     int sqlite3_prepare_v2(*db, *zSql, sqlite3_stmt **ppStmt);
-//     /* Execute SQL statement */
-//     rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
-//
-//     if( rc != SQLITE_OK ) {
-//         fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//         sqlite3_free(zErrMsg);
-//     } else {
-//         fprintf(stdout, "Operation done successfully\n");
-//     }
-//
-//
-//     sqlite3_close(db);
-//     return;
-// }
 // ################# END OF DATABASE INTERFACE FUNCTIONS #################
 
 
