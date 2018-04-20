@@ -45,7 +45,7 @@ void StockStallion::commandLineLoginRegisterView(){
     }
 }
 
-
+//opens a switch statement that interacts with a menu of options
 void StockStallion::portfolioView(){
     std::cout << "\n\n Welcome to the StockStallion Main Menu!\n\n";
 
@@ -59,20 +59,24 @@ void StockStallion::portfolioView(){
 
         switch(choice){
             case 1:
+                //returns current price
                 StockStallion::currentPrice();
                 break;
             case 2:
+                //adds a stock to a users list of stock
                 StockStallion::addStock();
                 break;
             case 3:
+                //removes a stock from the users list
                 StockStallion::removeStock();
                 break;
             case 4:
+                //prints out the portfolio
                 viewStocks();
                 break;
             case 5:
+                //exits program
                 std::cout << "Thank you for using Stock Stallion!\n\n";
-                //saveState();
                 exit(0);
         }
     }
@@ -665,40 +669,40 @@ void StockStallion::viewStocks(){
 
         }
 
-        std::istringstream stream2(stocks);
-        std::string line2;
-        double currentPrice0 = 0;
-
-        std::cout << "\n Composition: \n"<< endl;
-
-        while(std::getline(stream2, line2)){
-            std::string compName;
-            char until(' ');
-            compName = line2.substr(0, line2.find(until));
-
-            currentPrice = curlRequestPrice(compName);
-
-            //error catching
-            if(currentPrice == ""){
-                while(currentPrice == ""){
-                    currentPrice = curlRequestPrice(compName);
-                }
-            }
-
-            currentPrice0 = stod(currentPrice);
-
-            //find number of shares
-            int pos0 = line2.find(" x");
-            std::string numOwned = line2.substr(pos0+2, (line2.find(' ')+1 - pos0+2));
-            int numShares = stoi(numOwned);
-
-            double percentMakeup;
-
-            percentMakeup = 100 * currentPrice0 * numShares / portfolioValue;
-
-            std::cout << fixed;
-            std::cout << compName << " x" << numShares << " investment: " << percentMakeup << "% of portfolio" << endl;
-        }
+//        std::istringstream stream2(stocks);
+//        std::string line2;
+//        double currentPrice0 = 0;
+//
+//        std::cout << "\n Composition: \n"<< endl;
+//
+//        while(std::getline(stream2, line2)){
+//            std::string compName;
+//            char until(' ');
+//            compName = line2.substr(0, line2.find(until));
+//
+//            currentPrice = curlRequestPrice(compName);
+//
+//            //error catching
+//            if(currentPrice == ""){
+//                while(currentPrice == ""){
+//                    currentPrice = curlRequestPrice(compName);
+//                }
+//            }
+//
+//            currentPrice0 = stod(currentPrice);
+//
+//            //find number of shares
+//            int pos0 = line2.find(" x");
+//            std::string numOwned = line2.substr(pos0+2, (line2.find(' ')+1 - pos0+2));
+//            int numShares = stoi(numOwned);
+//
+//            double percentMakeup;
+//
+//            percentMakeup = 100 * currentPrice0 * numShares / portfolioValue;
+//
+//            std::cout << fixed;
+//            std::cout << compName << " x" << numShares << " investment: " << percentMakeup << "% of portfolio" << endl;
+//        }
 
 
         portfolioGrowth = percentChange(originalBuy, portfolioValue);

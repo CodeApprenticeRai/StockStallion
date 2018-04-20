@@ -66,7 +66,7 @@ void User::removeFromStockList(std::string tickerSymbol, std::string priceAt, st
                         line = "";
                     }
                     else{
-                        line.replace(start, end-1, numShares);
+                        line.replace(start, end, numShares);
                     }
 
                 }
