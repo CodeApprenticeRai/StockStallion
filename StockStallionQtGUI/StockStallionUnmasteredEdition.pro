@@ -27,17 +27,32 @@ SOURCES += \
         main.cpp \
     mainwindow.cpp \
     registerwindow.cpp \
-    stockstallionwindow.cpp
+    stockstallionwindow.cpp \
+    tab_portfolio.cpp \
+    tab_profile.cpp \
+    tab_about.cpp \
+    portfoliostockwidget.cpp \
+    stockselection.cpp
 
 HEADERS += \
         mainwindow.h \
     registerwindow.h \
-    stockstallionwindow.h
+    stockstallionwindow.h \
+    tab_portfolio.h \
+    tab_profile.h \
+    tab_about.h \
+    portfoliostockwidget.h \
+    stockselection.h
 
 FORMS += \
     mainwindow.ui \
     registerwindow.ui \
-    stockstallionwindow.ui
+    stockstallionwindow.ui \
+    tab_portfolio.ui \
+    tab_profile.ui \
+    tab_about.ui \
+    portfoliostockwidget.ui \
+    stockselection.ui
 
 RESOURCES += \
     images.qrc

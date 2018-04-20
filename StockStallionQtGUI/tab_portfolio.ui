@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>tab_Portfolio</class>
+ <widget class="QWidget" name="tab_Portfolio">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>741</width>
+    <height>541</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="userLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>591</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>User's Portfolio:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel_2">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>50</y>
+     <width>121</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Shares</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel_3">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>50</y>
+     <width>121</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Bought At</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel_4">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>50</y>
+     <width>121</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Current Price</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel_5">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>50</y>
+     <width>151</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Total Current Value</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tickerLabel_6">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>50</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>% Change</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addStockButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>420</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: Gainsboro;
+border-style: solid;
+border-width:2px;
+border-radius:7px;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+   </property>
+   <property name="text">
+    <string>Add Stocks</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="removeStockButton">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>420</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: Gainsboro;
+border-style: solid;
+border-width:2px;
+border-radius:7px;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+   </property>
+   <property name="text">
+    <string>Remove Stock</string>
+   </property>
+  </widget>
+  <widget class="QScrollArea" name="stockListing">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>721</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>719</width>
+      <height>199</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

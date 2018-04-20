@@ -1,6 +1,6 @@
 #include "registerwindow.h"
 #include "ui_registerwindow.h"
-#include "./sqlite/sqlite3.h"
+#include "stockstallionwindow.h"
 #include <QtSql>
 #include <QFileInfo>
 #include <QMouseEvent>
@@ -88,14 +88,24 @@ void RegisterWindow::on_registerButton_released()
 void RegisterWindow::on_registerButton_clicked()
 {
     if(checkUsername())
+    {
         ui->usernameErrorLabel->setStyleSheet("color: transparent");
+    }
     else
+    {
+        ui->usernameErrorLabel->setText("<html><head/><body><p>Username must contain at least<br />10 letters or numbers</p></body></html>");
         ui->usernameErrorLabel->setStyleSheet("color: red");
+    }
 
     if(checkEmail())
+    {
         ui->emailErrorLabel->setStyleSheet("color: transparent");
+    }
     else
+    {
+        ui->emailErrorLabel->setText("Please enter a valid E-mail");
         ui->emailErrorLabel->setStyleSheet("color: red");
+    }
 
     if(checkPassword())
     {
@@ -126,6 +136,10 @@ void RegisterWindow::on_registerButton_clicked()
             db.exec("CREATE TABLE IF NOT EXISTS users( id INT , username TEXT PRIMARY KEY NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, stocklist TEXT);");
 
             //Checks if username already exists
+            bool validUsername = false;
+            bool validEmail = false;
+
+            //Check if username is taken
             if(query.exec("select * from users where username='" + ui->usernameTextBox->text() + "' or email='" + ui->emailTextBox->text() + "'"))
             {
                 int count = 0;
@@ -135,10 +149,46 @@ void RegisterWindow::on_registerButton_clicked()
                 }
                 if(count == 0)
                 {
-                    db.exec("INSERT into users(username, email, password, stocklist) VALUES('" + ui->usernameTextBox->text() + "','" + ui->emailTextBox->text() + "','" + ui->passwordTextBox->text() + "','NOSTOCKS');");
+                    validUsername = true;
                 }
             }
 
+            //Check if email is taken
+            if(query.exec("select * from users where email='" + ui->emailTextBox->text() + "'"))
+            {
+                int count = 0;
+                while(query.next())
+                {
+                    count++;
+                }
+                if(count == 0)
+                {
+                    validEmail = true;
+                }
+            }
+
+            if(validUsername && validEmail)
+            {
+                db.exec("INSERT into users(username, email, password, stocklist) VALUES('" + ui->usernameTextBox->text() + "','" + ui->emailTextBox->text() + "','" + ui->passwordTextBox->text() + "','NOSTOCKS');");
+                this->hide();
+                StockStallionWindow *stockStallion = new StockStallionWindow(this);
+                stockStallion->setUserName(ui->usernameTextBox->text());
+                stockStallion->setPassWord(ui->passwordTextBox->text());
+                stockStallion->show();
+                db.close();
+            }
+
+            if(!validUsername)
+            {
+                ui->usernameErrorLabel->setText("Username already taken");
+                ui->usernameErrorLabel->setStyleSheet("color: red");
+            }
+
+            if(!validEmail)
+            {
+                ui->emailErrorLabel->setText("E-mail already taken");
+                ui->emailErrorLabel->setStyleSheet("color: red");
+            }
             db.close();
         }
     }
@@ -213,4 +263,9 @@ bool RegisterWindow::checkPassword()
     }
 
     return (containsAlphaNumerics && containsLetter && containsNumber);
+}
+
+void RegisterWindow::on_pushButton_clicked()
+{
+    this->hide();
 }
