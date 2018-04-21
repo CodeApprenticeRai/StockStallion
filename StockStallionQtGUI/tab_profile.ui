@@ -16,14 +16,81 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>150</y>
-     <width>47</width>
-     <height>14</height>
+     <x>10</x>
+     <y>10</y>
+     <width>271</width>
+     <height>16</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
    <property name="text">
-    <string>profile</string>
+    <string>Account Information:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>271</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Registered since:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>90</y>
+     <width>271</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Stocks Owned:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>271</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Total Shares Owned:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>271</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 12pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Total Shares Owned:</string>
    </property>
   </widget>
  </widget>

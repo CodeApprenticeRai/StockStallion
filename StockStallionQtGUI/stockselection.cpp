@@ -18,7 +18,7 @@ StockSelection::StockSelection(QWidget *parent) :
 
     //Colors the window white
     ui->centralWidget->setObjectName("centralWidget");
-    ui->centralWidget->setStyleSheet(" #centralWidget {background-color: qlineargradient(x1:0, x2: 0, y1: 0, y2: .5, stop: 0 #84A9FF, stop: 0.2 #84A9FF, stop: 0.21 white, stop: 1 white); border-radius:5px; border:1px solid black}");
+    ui->centralWidget->setStyleSheet(" #centralWidget {background-color: qlineargradient(x1:0, x2: 0, y1: 0, y2: .5, stop: 0 #84A9FF, stop: 0.28 #84A9FF, stop: 0.281 white, stop: 1 white); border-radius:5px; border:1px solid black}");
 
 }
 
@@ -55,7 +55,7 @@ StockSelection::~StockSelection()
 
 void StockSelection::on_cancelButton_clicked()
 {
-    ui->tickerTextBox->setText("NULL");
+    canceled = true;
     this->close();
 }
 
@@ -101,15 +101,13 @@ void StockSelection::on_addStockButton_released()
 
 void StockSelection::on_addStockButton_clicked()
 {
+    if(ui->tickerTextBox->text() == "")
+        return;
+
     this->close();
 }
 
 QString StockSelection::getTicker()
 {
-    return ui->tickerTextBox->text();
-}
-
-QString StockSelection::getShares()
-{
-    return ui->sharesSpinBox->value();
+    return ui->tickerTextBox->text().toUpper();
 }

@@ -6,6 +6,10 @@ tab_About::tab_About(QWidget *parent) :
     ui(new Ui::tab_About)
 {
     ui->setupUi(this);
+
+    //Stock Stallion Logo
+    QPixmap logo(":/StockStallionImages/StockStallion Images/Stock Stallion Logo.png");
+    ui->logo->setPixmap(logo.scaled(ui->logo->width(), ui->logo->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 tab_About::~tab_About()

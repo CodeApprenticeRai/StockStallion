@@ -14,8 +14,7 @@ class StockSelection : public QDialog
 public:
     explicit StockSelection(QWidget *parent = 0);
     QString getTicker();
-    QString getShares();
-    QString getTotalPrice();
+    bool canceled = false;
     ~StockSelection();
 
 protected:
@@ -39,7 +38,6 @@ private slots:
 
 private:
     Ui::StockSelection *ui;
-    QString totalPrice;
     bool isMouseDown = false;
 };
 

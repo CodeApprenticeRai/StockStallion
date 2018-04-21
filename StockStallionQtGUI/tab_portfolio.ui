@@ -169,28 +169,116 @@ font: 12pt &quot;Century Gothic&quot;;
     <string>Remove Stock</string>
    </property>
   </widget>
-  <widget class="QScrollArea" name="stockListing">
+  <widget class="QStackedWidget" name="stockListStacked">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>70</y>
      <width>721</width>
-     <height>201</height>
+     <height>261</height>
     </rect>
    </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(225, 225, 225);</string>
    </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>719</width>
-      <height>199</height>
-     </rect>
-    </property>
-   </widget>
+   <property name="currentIndex">
+    <number>-1</number>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="nextButton">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>340</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: Gainsboro;
+border-style: solid;
+border-width:2px;
+border-radius:7px;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+   </property>
+   <property name="text">
+    <string>Next Page</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backButton">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>340</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: Gainsboro;
+border-style: solid;
+border-width:2px;
+border-radius:7px;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+   </property>
+   <property name="text">
+    <string>Previous Page</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="pageSelectSpinner">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>380</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>1</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pageCountLabel">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>387</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Page</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="maxPageLabel">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>387</y>
+     <width>61</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 11pt &quot;Century Gothic&quot;;</string>
+   </property>
+   <property name="text">
+    <string>of 1</string>
+   </property>
   </widget>
  </widget>
  <resources/>

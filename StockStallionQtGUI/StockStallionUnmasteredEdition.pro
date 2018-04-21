@@ -32,7 +32,8 @@ SOURCES += \
     tab_profile.cpp \
     tab_about.cpp \
     portfoliostockwidget.cpp \
-    stockselection.cpp
+    stockselection.cpp \
+    sharesselection.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +43,8 @@ HEADERS += \
     tab_profile.h \
     tab_about.h \
     portfoliostockwidget.h \
-    stockselection.h
+    stockselection.h \
+    sharesselection.h
 
 FORMS += \
     mainwindow.ui \
@@ -52,7 +54,8 @@ FORMS += \
     tab_profile.ui \
     tab_about.ui \
     portfoliostockwidget.ui \
-    stockselection.ui
+    stockselection.ui \
+    sharesselection.ui
 
 RESOURCES += \
     images.qrc

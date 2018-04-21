@@ -27,6 +27,10 @@ StockStallionWindow::StockStallionWindow(QWidget *parent) :
     ui->centralwidget->setObjectName("centralWidget");
     ui->centralwidget->setStyleSheet(" #centralWidget {background-color: qlineargradient(x1:0, x2: 0, y1: 0, y2: .5, stop: 0 #84A9FF, stop: 0.16 #84A9FF, stop: 0.161 white, stop: 1 white); border-radius:5px; border:1px solid black}");
 
+    //Stock Stallion Logo
+    QPixmap logo(":/StockStallionImages/StockStallion Images/Login Form/stallionLogoWhite.png");
+    ui->stockStallionLogo->setPixmap(logo.scaled(ui->stockStallionLogo->width(), ui->stockStallionLogo->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
     //Set portfolio button icon
     QIcon portfolioIcon(":/StockStallionImages/StockStallion Images/StockStallion Form/portfolio-icon.png");
     ui->portfolioButton->setIcon(portfolioIcon);
@@ -45,9 +49,6 @@ StockStallionWindow::StockStallionWindow(QWidget *parent) :
     //Hide profile and about tab by default
     hideAllTabs();
     ui->portfolioTab->show();
-
-    //connect(manager, SIGNAL(finished(QNetworkReply*)), this, slot(requestRead(QNetworkReply*)));
-
 
     addStocksToPortfolio();
 }
