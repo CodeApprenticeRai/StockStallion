@@ -30,6 +30,8 @@ private slots:
 
     void on_registerButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::RegisterWindow *ui;
     bool isMouseDown = false;

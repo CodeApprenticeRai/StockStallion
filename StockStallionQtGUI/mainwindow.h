@@ -15,7 +15,6 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    QSqlDatabase db;
     ~MainWindow();
 
 protected:
@@ -37,6 +36,7 @@ private slots:
     void on_pushButton_clicked();
 
 private:
+    QSqlDatabase db;
     Ui::MainWindow *ui;
     bool isMouseDown = false;
 };

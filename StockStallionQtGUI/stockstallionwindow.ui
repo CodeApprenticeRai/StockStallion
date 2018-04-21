@@ -6,104 +6,230 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>644</width>
-    <height>404</height>
+    <width>850</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="dataTextBox">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>110</y>
-      <width>281</width>
-      <height>181</height>
+      <x>1</x>
+      <y>48</y>
+      <width>111</width>
+      <height>551</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(245, 245, 245);</string>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QToolButton" name="portfolioButton">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>0</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(225, 225, 225);
+border-style: solid;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Portfolio</string>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="profileButton">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>50</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(245, 245, 245);
+border-style: solid;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Profile</string>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="aboutButton">
+      <property name="geometry">
+       <rect>
+        <x>1</x>
+        <y>100</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(245, 245, 245);
+border-style: solid;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>About</string>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="settingsButton">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>490</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(245, 245, 245);
+border-style: solid;
+border-color: black;
+font: 12pt &quot;Century Gothic&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Settings</string>
+      </property>
+      <property name="toolButtonStyle">
+       <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>320</y>
-      <width>121</width>
-      <height>51</height>
+      <y>10</y>
+      <width>231</width>
+      <height>31</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;Century Gothic&quot;;
+color:white;</string>
+    </property>
     <property name="text">
-     <string>Grab Data</string>
+     <string>StockStallion Beta</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>60</y>
-      <width>80</width>
-      <height>51</height>
+      <x>810</x>
+      <y>5</y>
+      <width>31</width>
+      <height>41</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;
+color: white;
+font: 75 20pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
     <property name="text">
-     <string>Portfolio</string>
+     <string>X</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>110</y>
-      <width>80</width>
-      <height>51</height>
+      <x>780</x>
+      <y>4</y>
+      <width>31</width>
+      <height>37</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;
+color: white;
+font: 75 20pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
     <property name="text">
-     <string>Profile</string>
+     <string>_</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="tab_Portfolio" name="portfolioTab" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>160</y>
-      <width>80</width>
-      <height>51</height>
+      <x>110</x>
+      <y>50</y>
+      <width>731</width>
+      <height>541</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="tab_Profile" name="profileTab" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>350</y>
-      <width>80</width>
-      <height>51</height>
+      <x>110</x>
+      <y>50</y>
+      <width>731</width>
+      <height>541</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Settings</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="tab_Profile" name="aboutTab" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>80</width>
-      <height>22</height>
+      <x>110</x>
+      <y>50</y>
+      <width>731</width>
+      <height>541</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>ProfilePicture</string>
     </property>
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tab_Portfolio</class>
+   <extends>QWidget</extends>
+   <header>tab_portfolio.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tab_Profile</class>
+   <extends>QWidget</extends>
+   <header>tab_profile.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

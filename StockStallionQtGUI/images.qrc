@@ -3,5 +3,8 @@
         <file>StockStallion Images/Login Form/passwordLock.png</file>
         <file>StockStallion Images/Login Form/stallionLogoWhite.png</file>
         <file>StockStallion Images/Login Form/userName.png</file>
+        <file>StockStallion Images/StockStallion Form/about-icon.png</file>
+        <file>StockStallion Images/StockStallion Form/portfolio-icon.png</file>
+        <file>StockStallion Images/StockStallion Form/profile-icon.png</file>
     </qresource>
 </RCC>

@@ -33,8 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //dropShadow->setBlurRadius(1);
     //ui->frame->setGraphicsEffect(dropShadow);
     
-    //Add images to qlabel
-
     //Stock Stallion Logo
     QPixmap logo(":/StockStallionImages/StockStallion Images/Login Form/stallionLogoWhite.png");
     ui->stockStallionLogo->setPixmap(logo.scaled(ui->stockStallionLogo->width(), ui->stockStallionLogo->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -117,16 +115,16 @@ void MainWindow::on_loginButton_clicked()
             {
                 this->hide();
                 StockStallionWindow *stockStallion = new StockStallionWindow(this);
+                stockStallion->setUserName(ui->usernameTextBox->text());
+                stockStallion->setPassWord(ui->passwordTextBox->text());
                 stockStallion->show();
                 db.close();
             }
         }
-        else
-        {
-            ui->passwordTextBox->setText("");
-            ui->usernameErrorLabel->setStyleSheet("color: red");
-        }
     }
+    ui->passwordTextBox->setText("");
+    ui->usernameErrorLabel->setStyleSheet("color: red");
+    db.close();
 }
 
 void MainWindow::on_pushButton_2_clicked()
