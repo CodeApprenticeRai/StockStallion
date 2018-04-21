@@ -26,7 +26,6 @@ class StockStallion {
 
 
         // User Object Manipulation Functions
-//        bool curlRequest(std::string);
 		std::string SMA(std::string);
         std::string curlRequestPrice(std::string);
         double percentChange(double,double);
@@ -41,7 +40,6 @@ class StockStallion {
 		// Database Functions
 		void initializeDB();
 
-        void saveState();
 
 		void addUserToDB(std::string username, std::string password);
 
