@@ -280,6 +280,8 @@ void StockStallion::currentPrice() {
         std::cout << "\nEnter the Ticker Symbol of the Stock whose price you would like to check: ";
         std::cin >> ticker_symbol;
 
+        std::cout << "\nLoading...\n" << endl;
+
         //dealing with bad input
         if(cin.get() == ' '){
             // allows program to ignore everything after the first space
@@ -335,6 +337,8 @@ void StockStallion::addStock(){
         std::cout << "\nEnter the Ticker Symbol You Would Like to Add: ";
         std::cin >> ticker_symbol;
 
+        std::cout << "\nLoading...\n" << endl;
+
         //dealing with bad input
         if(cin.get() == ' '){
             // allows program to ignore everything after the first space
@@ -368,6 +372,8 @@ void StockStallion::addStock(){
         std::cout << "\nHow many shares of " << ticker_symbol << " would you like to add? " << endl;
 
         std::cin >> numShares;
+
+        std::cout << "\nAdding...\n" << endl;
 
         //dealing with bad input
         if(cin.get() == ' '){
@@ -460,11 +466,13 @@ int StockStallion::yesNoMenu(){
 void StockStallion::removeStock(){
     std::string ticker_symbol;
     std::string stocks = loggedInAsUser->getStockList();
+    int numSharesToRemove = 0;
 
     bool checker = true;
     bool progression = false;
 
     int numShares = 0;
+
 
     if(stocks == ""){
         std::cout << "\nPortfolio is empty, add stocks before removing them\n";
@@ -486,8 +494,10 @@ void StockStallion::removeStock(){
             checker = true;
         }
         else if(stocks.find(ticker_symbol) == -1){
+
             std::cout << "\nNot in your portfolio, try again\n" << endl;
             checker = true;
+
         }
         else{
             checker = false;
@@ -540,7 +550,6 @@ void StockStallion::removeStock(){
 
     if(progression){
         checker = true;
-        int numSharesToRemove = 0;
 
         while(checker){
             std::cout << "Enter how many shares of " << ticker_symbol
@@ -588,8 +597,15 @@ void StockStallion::removeStock(){
 
             }
 
+
+
+
     }
     else{
+        if(numSharesToRemove == 0){
+            std::cout << "\nInvalid input, " << ticker_symbol << " was not removed" << endl;
+        }
+
         return;
     }
 
@@ -668,42 +684,6 @@ void StockStallion::viewStocks(){
                       << ", Total Current Value: $" << intermediate <<", Change: "  << assetGrowth << "%" << endl;
 
         }
-
-//        std::istringstream stream2(stocks);
-//        std::string line2;
-//        double currentPrice0 = 0;
-//
-//        std::cout << "\n Composition: \n"<< endl;
-//
-//        while(std::getline(stream2, line2)){
-//            std::string compName;
-//            char until(' ');
-//            compName = line2.substr(0, line2.find(until));
-//
-//            currentPrice = curlRequestPrice(compName);
-//
-//            //error catching
-//            if(currentPrice == ""){
-//                while(currentPrice == ""){
-//                    currentPrice = curlRequestPrice(compName);
-//                }
-//            }
-//
-//            currentPrice0 = stod(currentPrice);
-//
-//            //find number of shares
-//            int pos0 = line2.find(" x");
-//            std::string numOwned = line2.substr(pos0+2, (line2.find(' ')+1 - pos0+2));
-//            int numShares = stoi(numOwned);
-//
-//            double percentMakeup;
-//
-//            percentMakeup = 100 * currentPrice0 * numShares / portfolioValue;
-//
-//            std::cout << fixed;
-//            std::cout << compName << " x" << numShares << " investment: " << percentMakeup << "% of portfolio" << endl;
-//        }
-
 
         portfolioGrowth = percentChange(originalBuy, portfolioValue);
         char changeSign;
@@ -788,7 +768,6 @@ void StockStallion::initializeDB(){
     db->close();
 }
 
-void StockStallion::saveState(){};
 // void StockStallion::addUserToDB(std::string username, std::string password){
 //   sqlite3 *db;
 //   char *zErrMsg = 0;
