@@ -6,8 +6,14 @@
 #include "./sqlite/sqlite3.h"
 #include "Database.h"
 #include "User.h"
+/*
+ * StockStallion is the premier choice in checking current prices and creating personal private
+ * portfolios for your personal investment choices. Unlike other services that require you to sign up
+ * with a bank account StockStallion is free and anonymous so do whatever you like with it without
+ * fearing the consequences of blowing your money before the market decides to dive lower than manic depression.
+ */
 
-// Constructor: Initiatlizes component and prints Welcome Message.
+// Constructor: Initializes a database by calling the InitializeDB method and returns a prompt
 StockStallion::StockStallion(){
   // initialize db on startup
     StockStallion::initializeDB();
@@ -20,6 +26,13 @@ StockStallion::StockStallion(){
 // ################# VIEW FUNCTIONS #################
 
 // Register / Login User else exit
+/*
+ * Creates a boolean value initialized as false and then runs a while loop checking an
+ * integer value inputted by the user using the loginRegisterPrompt method. If the user inputs 1
+ * then the method calls the authorizeLogin method and breaks out of the loop, if the user instead inputs 2
+ * the registerNewUser method will be called and then the loop breaks, else if the user returns 3 the program
+ * ends normally.
+ */
 void StockStallion::commandLineLoginRegisterView(){
 
     // This function can be abstracted as a function for handling all user
@@ -46,6 +59,10 @@ void StockStallion::commandLineLoginRegisterView(){
 }
 
 //opens a switch statement that interacts with a menu of options
+/*
+ * The function prints a welcome prompt and uses a switch statement in order which calls
+ * the currentPrice, addStock, removeStock, viewStocks, or exit the program.
+ */
 void StockStallion::portfolioView(){
     std::cout << "\n\n Welcome to the StockStallion Main Menu!\n\n";
 
@@ -92,6 +109,11 @@ void StockStallion::portfolioView(){
 // ################# PROMPTS #################
 
 // displays loginRegister View options to user and returns their choice
+/*
+ * Returns a prompt asking the user to Register (1), Login (2), or Exit (3).
+ * The method creates an integer value and a boolean and then checks to see if
+ * the integer inputted by the user is valid and if so returns the value if valid.
+ */
 int StockStallion::loginRegisterPrompt()
 {
   std::cout << "\nChoose an option:\n\n";
@@ -116,6 +138,10 @@ int StockStallion::loginRegisterPrompt()
   return choice;
 }
 
+/*
+ *prints a prompt asking the user to enter what the user would like to do with his portfolio object
+ * then it verifies to make the input is corect before returning the value
+ */
 int StockStallion::portfolioViewPrompt() {
         std::cout << "\nChoose an option:\n\n";
         std::cout << "[1]\tView Current Stock Prices and indicators\n";
@@ -155,7 +181,10 @@ struct httpLink {
 
 };
 
-
+/*
+ * Makes a curl request with the selected ticker symbol and reads the json output produced by the curl request.
+ * Then finds the most recent simple moving average and returns it as a string.
+ */
 std::string StockStallion::SMA(std::string ticker){
     CURL *curl = curl_easy_init();
 
@@ -212,7 +241,10 @@ std::string StockStallion::SMA(std::string ticker){
     }
 }
 
-
+/*
+ * Makes a curl request using the selected ticker symbol and then reads the json output produced via
+ * the curl request and returns the recent price of the given stock in a string.
+ */
 std::string StockStallion::curlRequestPrice(std::string ticker){
     CURL *curl = curl_easy_init();
 
@@ -325,7 +357,13 @@ void StockStallion::currentPrice() {
 
 }
 
-
+/*
+ * Takes the username of the current database and then requests the user to add a stock and checks to make sure
+ * the user input is valid. If the user doesn’t input a proper stock name then will loop continuously.
+ * Once the stock is verified the method will once again ask the user to input the number of shares that the
+ * user desires and if valid then will add the correct number of shares. If the user inputs 0 the method ends
+ * immediately, else the method then takes the number of shares of said stock and adds it to the database.
+ */
 void StockStallion::addStock(){
     std::string username = loggedInAsUser->getUsername();
 
@@ -711,54 +749,11 @@ void StockStallion::viewStocks(){
 
 // ################# DATABASE INTERFACE FUNCTIONS #################
 
-// static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-//    int i;
-//    for(i = 0; i<argc; i++) {
-//       printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-//    }
-//    printf("\n");
-//    return 0;
-// }
-// Create database when the app runs if it doesn't already exist.
-// Test the connection to the db if it does exist.
-// void StockStallion::initializeDB(){
-//   sqlite3 *db;
-//   char *zErrMsg = 0;
-//   const char *sql;
-//   int rc;
-//    sqlite3_stmt *statement;
-//
-//    rc = sqlite3_open("stockstallion.db", &db);
-//
-//   if( rc ){
-//     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db) );
-//     return;
-//   } else {
-//     fprintf(stdout, "Opened database successfully\n");
-//
-//   }
-//
-//   sql = "CREATE TABLE IF NOT EXITS users(" \
-//         "id       INT PRIMARY KEY   NOT NULL," \
-//         "username TEXT              NOT NULL" \
-//         "password TEXT              NOT NULL);";
-//
-//   rc = sqlite3_prepare_v2(db, sql, -1, &statement, 0);
-////    sqlite3_prepare_v2(database, query, -1, &statement, 0);
-//   if( rc != SQLITE_OK ){
-//     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//        sqlite3_free(zErrMsg);
-//     } else {
-//       sqlite3_step(statement);
-//       sqlite3_finalize(statement);
-//       fprintf(stdout, "Table created successfully\n");
-//
-//     }
-//
-//   sqlite3_close(db);
-//   return;
-// }
-
+/*
+ * Constructs a Database object with with the string literal “stockstallion.db” and then creates another
+ * character pointer q0. The method then calls the query method from the current Database object using this
+ * new pointer before closing the database.
+ */
 void StockStallion::initializeDB(){
     Database *db;
     db = new Database("stockstallion.db");
@@ -768,6 +763,7 @@ void StockStallion::initializeDB(){
     db->close();
 }
 
+<<<<<<< HEAD
 // void StockStallion::addUserToDB(std::string username, std::string password){
 //   sqlite3 *db;
 //   char *zErrMsg = 0;
@@ -797,6 +793,14 @@ void StockStallion::initializeDB(){
 //   sqlite3_close(db);
 //   return;
 // }
+=======
+/*
+ * Constructs a database object, a string with some random value, and then a string with an empty space.
+ * Using the two previous strings the method then constructs another string and finally creates a character pointer.
+ * Using the character pointer it calls a query method from the current Database using this new pointer before
+ * closing the database.
+ */
+>>>>>>> 6725efed34abc4f904100475522b4a6ce0297788
 void StockStallion::addUserToDB(std::string username, std::string password) {
     Database *db;
     db = new Database("stockstallion.db");
@@ -807,7 +811,14 @@ void StockStallion::addUserToDB(std::string username, std::string password) {
     db->query(q2);
     db->close();
 }
-
+/*
+ * Constructs a Database object, a string and a character pointer.
+ * Makes a vector of a vector of strings that holds query result(s) from the current Database object.
+ * If the vector (result) is empty then it will return a prompt saying incorrect username and combination,
+ * closes the database and ends the method. If the vector contains a value then an iterator is constructed and
+ * will iterate through the vector checking the values at row(0) and row(1) and matching the username and
+ * password and then creating a static object before ending the method
+ */
 bool StockStallion::verifyLogin(std::string username, std::string password) {
     Database *db;
     db = new Database("stockstallion.db");
@@ -835,55 +846,9 @@ bool StockStallion::verifyLogin(std::string username, std::string password) {
                 return true;
             }
         }
-//        std::vector<std::string> user_vector = result.at(0);
-//        return;
         }
     }
 
-// void StockStallion::verifyLogin(std::string username, std::string password){
-//     sqlite3 *db;
-//     char *zErrMsg = 0;
-//
-//     const char *zSql; /* SQL statement, UTF-8 encoded */
-//     sqlite3_stmt **ppStmt; /* OUT: Statement handle */
-//
-//     int rc;
-//     char *sql;
-//     const char* data = "Callback function called";
-//
-//     /* Open database */
-//     rc = sqlite3_open("stockstallion.db", &db);
-//
-//     if( rc ) {
-//         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-//         return;
-//     } else {
-//         fprintf(stderr, "Opened database successfully\n");
-//     }
-//
-//     std::vector< std::vector < std:: string > > result;
-//     for( int i = 0; i < 2; i++ )
-//         result.push_back(std::vector< std::string >());
-//
-//
-//     /* Create SQL statement */
-//     zSql = "SELECT * from users";
-//
-////     int sqlite3_prepare_v2(*db, *zSql, sqlite3_stmt **ppStmt);
-//     /* Execute SQL statement */
-//     rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
-//
-//     if( rc != SQLITE_OK ) {
-//         fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//         sqlite3_free(zErrMsg);
-//     } else {
-//         fprintf(stdout, "Operation done successfully\n");
-//     }
-//
-//
-//     sqlite3_close(db);
-//     return;
-// }
 // ################# END OF DATABASE INTERFACE FUNCTIONS #################
 
 
@@ -892,6 +857,11 @@ bool StockStallion::verifyLogin(std::string username, std::string password) {
 
 // ################# INPUT HANDLING FUNCTIONS #################
 
+/*
+ * Creates two integers two count the occurances of characters and integers, the method then loops through
+ * the user’s input and will return false if not enough alphabetic characters or integers are entered, if
+ * any other characters are inputted, or if the string the user inputted isn’t long enough.
+ */
 bool StockStallion::verifyUsername(std::string &username){
   /**
    * string must be at least 10 characters long and contain only
@@ -917,7 +887,9 @@ bool StockStallion::verifyUsername(std::string &username){
   }
   return false;
 }
+
 // passwords shouldn't contain spaces.
+//see verifyUsername for function
 bool StockStallion::verifyPassword(std::string &password){
   int integer = 0;
   int chara = 0;
@@ -939,12 +911,22 @@ bool StockStallion::verifyPassword(std::string &password){
   }
   return false;
 }
+
+//If the choice is less than 0 or greater than max then the method will return false
 bool StockStallion::verifyChoiceInRange(int choice, int max){
   if ( choice < 0){
     return false;
   }
   return (choice <= max);
 }
+
+/*
+ * Prints a string welcoming the the user to the program and subsequently creates two string variables named
+ * username and password. User then inputs a string and verifies if it matches the requirements as stated in
+ * the verifyUsername method and does the same with the password using the verifyPassword method. Once both
+ * password and username are verified the method calls the addUserToDB method and finally prints a string
+ * congratulating the user for registering
+ */
 void StockStallion::registerNewUser(){
   std::cout << "\n\n\nWelcome to the Stock Stallion Registration Prompt.";
   // other fields can be added { name, temperament, etc}
@@ -963,7 +945,13 @@ void StockStallion::registerNewUser(){
   return;
 }
 
-//perhaps return an object instead
+/*
+ * Prints a string welcoming the the user to the program and
+ * subsequently creates two string variables named username and password. User then inputs a string and
+ * verifies if it matches the requirements as stated in the verifyUsername method and does the same with the
+ * password using the verifyPassword method. Once both password and username are verified the method calls the
+ * verifyLogin method
+ */
 bool StockStallion::authorizeLogin(){
     std::cout << "\n\n\nWelcome to the Stock Stallion Login Prompt.";
     // other fields can be added { name, temperament, etc}
@@ -984,6 +972,13 @@ bool StockStallion::authorizeLogin(){
     return verified;
 }
 
+/*
+ *Constructs a database object, a string with some random value, and then a string with an empty space.
+ * Using the two previous strings the method then constructs another string and finally creates a character pointer.
+ * Using the character pointer it calls a query method from the current Database using this new pointer before
+ * closing the database. It then reads from the database looking for the user information and then uses it to
+ * construct a user object
+ */
 void StockStallion::buildUserObject(std::string username){
     Database *db;
     db = new Database("stockstallion.db");

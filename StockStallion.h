@@ -40,7 +40,10 @@ class StockStallion {
 		// Database Functions
 		void initializeDB();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6725efed34abc4f904100475522b4a6ce0297788
 		void addUserToDB(std::string username, std::string password);
 
 		bool verifyLogin(std::string username, std::string password);
