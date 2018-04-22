@@ -1,18 +1,31 @@
 #include "Database.h"
 #include <iostream>
-
+/*
+ * A database is a collection of information organized in such a way that it can be easily accessed,
+ * managed and updated. Data is organized into rows, columns and tables, and is indexed to render
+ * it easier to find information.
+ */
 Database::Database(char* filename)
 {
+    /*
+     * Constructor creates a database and sets it equal to NULL and then opens the database with name filename.
+     */
     database = NULL;
     open(filename);
 }
 
 Database::~Database()
 {
+    /*
+     * Nothing really happens
+     */
 }
 
 bool Database::open(char* filename)
 {
+    /*
+     * Checks to see if the database constructed is good and returns true if successful, else false
+     */
     if(sqlite3_open(filename, &database) == SQLITE_OK)
         return true;
 
@@ -58,5 +71,8 @@ vector<vector<string> > Database::query(char* query)
 
 void Database::close()
 {
+    /*
+     * Closes the database
+     */
     sqlite3_close(database);
 }

@@ -7,8 +7,11 @@
 #include <iostream>
 #include <vector>
 
+/*Assigns the username and stocklist values to their associated variables in the object
+ *and then creates a portfolio pointer and adds it to a vector which holds portfolio pointer values.
+ */
 User::User(std::string username, std::string stockList) // std::string email; // double balance)
-{
+    {
     this->username = username;
     this->stockList = stockList;
 
@@ -18,20 +21,29 @@ User::User(std::string username, std::string stockList) // std::string email; //
 
 }
 
+//Returns the user’s username
 std::string User::getUsername() {
     return this->username;
 }
 
+//Returns the list of stocks
 std::string User::getStockList(){
     return this->stockList;
 }
 
 
-
+/*
+ * Appends the stocklist string to include the ticker symbol of the stock, the number of shares and
+ * the price it was bought at
+ */
 void User::appendStockList(std::string tickerSymbol, std::string priceAt, std::string numShares){
     stockList = stockList + tickerSymbol + " x" + numShares + " bought at " + priceAt + ",\n";
 }
 
+/*
+ * Finds the name of the stock to remove, then the original number of shares and then removes them
+ * before updating the stocklist variable in the object
+ */
 void User::removeFromStockList(std::string tickerSymbol, std::string priceAt, std::string originalNum, int numToRemove) {
     std::istringstream stream(stockList);
     std::string line;
@@ -83,7 +95,7 @@ void User::removeFromStockList(std::string tickerSymbol, std::string priceAt, st
     stockList = temp;
 }
 
-
+//Returns the stock pointer at the first position in the vector
 std::vector<Stock>* User::getStocks() {
     return this->portfolios.at(0).getStocks();
 }
