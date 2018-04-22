@@ -31,7 +31,10 @@ bool Database::open(char* filename)
 
     return false;
 }
-
+/*
+ * makes a sqlite pointer and a vector of a vector of strings. If the database is good then the method will make two
+ * integers and loop filling up a string vector with character pointer values until it fills up
+ */
 vector<vector<string> > Database::query(char* query)
 {
     sqlite3_stmt *statement;
