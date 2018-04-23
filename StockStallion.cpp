@@ -763,44 +763,12 @@ void StockStallion::initializeDB(){
     db->close();
 }
 
-<<<<<<< HEAD
-// void StockStallion::addUserToDB(std::string username, std::string password){
-//   sqlite3 *db;
-//   char *zErrMsg = 0;
-//   const char *sql;
-//   int rc;
-//
-//   rc = sqlite3_open("stockstallion.db", &db);
-//
-//   if( rc ){
-//     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db) );
-//     return;
-//   } else {
-//     fprintf(stdout, "Opened database successfully\n");
-//   }
-//
-//   std::string insertUser = std::string("VALUES (") + "'" + username + "'"  + "," + "'" + password + "');";
-//
-//   sql = ("INSERT INTO users(username,password) " + insertUser).c_str();
-//
-//   rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-//   if( rc != SQLITE_OK ){
-//     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-//        sqlite3_free(zErrMsg);
-//     } else {
-//        fprintf(stdout, "Table created successfully\n");
-//     }
-//   sqlite3_close(db);
-//   return;
-// }
-=======
 /*
  * Constructs a database object, a string with some random value, and then a string with an empty space.
  * Using the two previous strings the method then constructs another string and finally creates a character pointer.
  * Using the character pointer it calls a query method from the current Database using this new pointer before
  * closing the database.
  */
->>>>>>> 6725efed34abc4f904100475522b4a6ce0297788
 void StockStallion::addUserToDB(std::string username, std::string password) {
     Database *db;
     db = new Database("stockstallion.db");
