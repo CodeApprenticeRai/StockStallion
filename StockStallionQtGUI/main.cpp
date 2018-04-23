@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 
+//Entry point for StockStallion. Opens login window.
 int main(int argc, char *argv[])
 {
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

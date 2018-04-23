@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QMouseEvent>
 
+//Initializes register window.
 RegisterWindow::RegisterWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::RegisterWindow)
@@ -29,16 +30,19 @@ RegisterWindow::RegisterWindow(QWidget *parent) :
 
 }
 
+//Destructor
 RegisterWindow::~RegisterWindow()
 {
     delete ui;
 }
 
+//Closes register window
 void RegisterWindow::on_pushButton_2_clicked()
 {
     this->close();
 }
 
+//Enables drag/drop on window
 void RegisterWindow::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -50,12 +54,14 @@ void RegisterWindow::mousePressEvent(QMouseEvent *event)
     }
 }
 
+//Enables drag/drop on window
 void RegisterWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     isMouseDown = false;
     offset = 0;
 }
 
+//Enables drag/drop on window
 void RegisterWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(isMouseDown)
@@ -65,6 +71,7 @@ void RegisterWindow::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+//Colors button based on press/release
 void RegisterWindow::on_registerButton_pressed()
 {
     ui->registerButton->setStyleSheet("background-color: Silver;"
@@ -75,6 +82,7 @@ void RegisterWindow::on_registerButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors button based on press/release
 void RegisterWindow::on_registerButton_released()
 {
     ui->registerButton->setStyleSheet("background-color: Gainsboro;"
@@ -85,6 +93,7 @@ void RegisterWindow::on_registerButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Verifys if user input is valid. Registers user and adds it to database if it is valid
 void RegisterWindow::on_registerButton_clicked()
 {
     if(checkUsername())
@@ -195,6 +204,7 @@ void RegisterWindow::on_registerButton_clicked()
     }
 }
 
+//Verifies if username is valid
 bool RegisterWindow::checkUsername()
 {
     QString username = ui->usernameTextBox->text();
@@ -216,6 +226,7 @@ bool RegisterWindow::checkUsername()
     return containsAlphaNumerics;
 }
 
+//Verifies if email is valid
 bool RegisterWindow::checkEmail()
 {
     if(ui->emailTextBox->text().contains('@') && !ui->emailTextBox->text().contains(' '))
@@ -235,6 +246,7 @@ bool RegisterWindow::checkEmail()
     return false;
 }
 
+//Verifies if password is valid
 bool RegisterWindow::checkPassword()
 {
     QString password = ui->passwordTextBox->text();
@@ -266,6 +278,7 @@ bool RegisterWindow::checkPassword()
     return (containsAlphaNumerics && containsLetter && containsNumber);
 }
 
+//Hides register window
 void RegisterWindow::on_pushButton_clicked()
 {
     this->hide();

@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 #include <QMouseEvent>
 
+//Initializes stock stallion window. Sets up database
 StockStallionWindow::StockStallionWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::StockStallionWindow)
@@ -51,11 +52,13 @@ StockStallionWindow::StockStallionWindow(QWidget *parent) :
     ui->portfolioTab->show();
 }
 
+//Destructor
 StockStallionWindow::~StockStallionWindow()
 {
     delete ui;
 }
 
+//Allows drag/drop on window
 void StockStallionWindow::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -67,12 +70,14 @@ void StockStallionWindow::mousePressEvent(QMouseEvent *event)
     }
 }
 
+//Allows drag/drop on window
 void StockStallionWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     isMouseDown = false;
     offset = 0;
 }
 
+//Allows drag/drop on window
 void StockStallionWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(isMouseDown)
@@ -80,25 +85,6 @@ void StockStallionWindow::mouseMoveEvent(QMouseEvent *event)
         QPoint *newPoint = new QPoint(event->globalPos().x() - offset->x(), event->globalPos().y() - offset->y());
         move(*newPoint);
     }
-}
-
-void StockStallionWindow::on_pushButton_clicked()
-{
-    //Network Request Code
-    manager = new QNetworkAccessManager();
-    QNetworkRequest request;
-    //request.setUrl(new QUrl("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=APPL&interval=1min&apikey=CRINRUHDWCNFTVK2"));
-    //manager->get(request);
-    //QNetworkReply *reply = NULL;
-
-}
-
-void StockStallionWindow::requestRead(QNetworkReply *reply)
-{
-    QByteArray data;
-    data = reply->readAll();
-    //QString dataString = QString::fromC(data.data());
-    //ui->dataTextBox->setText(dataString);
 }
 
 //Close window
@@ -113,6 +99,7 @@ void StockStallionWindow::on_pushButton_3_clicked()
     QWidget::setWindowState(Qt::WindowMinimized);
 }
 
+//Opens portfolio tab
 void StockStallionWindow::on_portfolioButton_clicked()
 {
     hideAllTabs();
@@ -122,15 +109,18 @@ void StockStallionWindow::on_portfolioButton_clicked()
     ui->aboutButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Opens profile tab
 void StockStallionWindow::on_profileButton_clicked()
 {
     hideAllTabs();
+    ui->profileTab->refresh();
     ui->profileTab->show();
     ui->profileButton->setStyleSheet("background-color:rgb(225, 225, 225); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
     ui->portfolioButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
     ui->aboutButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Opens about tab
 void StockStallionWindow::on_aboutButton_clicked()
 {
     hideAllTabs();
@@ -140,7 +130,7 @@ void StockStallionWindow::on_aboutButton_clicked()
     ui->profileButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
-//Hides all tabs
+//Hides all tabs. Used to simplify displaying other tabs
 void StockStallionWindow::hideAllTabs()
 {
     ui->portfolioTab->hide();
@@ -148,16 +138,19 @@ void StockStallionWindow::hideAllTabs()
     ui->aboutTab->hide();
 }
 
+//Colors buttons when pressed/released
 void StockStallionWindow::on_portfolioButton_pressed()
 {
     ui->portfolioButton->setStyleSheet("background-color:rgb(225, 225, 225); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void StockStallionWindow::on_profileButton_pressed()
 {
     ui->profileButton->setStyleSheet("background-color:rgb(225, 225, 225); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void StockStallionWindow::on_aboutButton_pressed()
 {
     ui->aboutButton->setStyleSheet("background-color:rgb(225, 225, 225); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
@@ -168,11 +161,13 @@ void StockStallionWindow::on_portfolioButton_released()
     ui->portfolioButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void StockStallionWindow::on_aboutButton_released()
 {
     ui->aboutButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void StockStallionWindow::on_profileButton_released()
 {
     ui->profileButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");

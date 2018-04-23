@@ -15,6 +15,7 @@
 #include <QNetworkReply>
 #include <openssl/aes.h>
 
+//Initializes the portfolio tab. Sets up the stock display. Loads stocks into display
 tab_Portfolio::tab_Portfolio(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::tab_Portfolio)
@@ -108,17 +109,20 @@ void tab_Portfolio::removeTransaction(QString ticker, double price, int shares)
     }
 }
 
+//Destructor
 tab_Portfolio::~tab_Portfolio()
 {
     delete ui;
     delete manager;
 }
 
+//Displays username on portfolio tab
 void tab_Portfolio::setPortfolioText(QString text)
 {
     ui->userLabel->setText(text);
 }
 
+//Passes username to the portfolio tab object
 void tab_Portfolio::setUsername(QString name)
 {
     username = name;
@@ -384,6 +388,7 @@ void tab_Portfolio::managerFinished(QNetworkReply *reply) {
     }
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_addStockButton_pressed()
 {
     ui->addStockButton->setStyleSheet("background-color: Silver;"
@@ -394,6 +399,7 @@ void tab_Portfolio::on_addStockButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_addStockButton_released()
 {
     ui->addStockButton->setStyleSheet("background-color: Gainsboro;"
@@ -404,6 +410,7 @@ void tab_Portfolio::on_addStockButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_removeStockButton_pressed()
 {
     ui->removeStockButton->setStyleSheet("background-color: Silver;"
@@ -414,6 +421,7 @@ void tab_Portfolio::on_removeStockButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_removeStockButton_released()
 {
     ui->removeStockButton->setStyleSheet("background-color: Gainsboro;"
@@ -424,6 +432,7 @@ void tab_Portfolio::on_removeStockButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_backButton_pressed()
 {
     ui->backButton->setStyleSheet("background-color: Silver;"
@@ -434,6 +443,7 @@ void tab_Portfolio::on_backButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_backButton_released()
 {
     ui->backButton->setStyleSheet("background-color: Gainsboro;"
@@ -444,6 +454,7 @@ void tab_Portfolio::on_backButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_nextButton_pressed()
 {
     ui->nextButton->setStyleSheet("background-color: Silver;"
@@ -454,6 +465,7 @@ void tab_Portfolio::on_nextButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void tab_Portfolio::on_nextButton_released()
 {
     ui->nextButton->setStyleSheet("background-color: Gainsboro;"

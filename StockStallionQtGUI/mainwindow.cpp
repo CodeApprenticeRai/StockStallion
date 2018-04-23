@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QMouseEvent>
 
+//Initializes login form
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -46,11 +47,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->passwordIcon->setPixmap(passIcon.scaled(ui->passwordIcon->width(), ui->passwordIcon->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
+//Deconstructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+//Allows drag/drop with window
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -62,12 +65,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     }
 }
 
+//Allows drag/drop with window
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     isMouseDown = false;
     offset = 0;
 }
 
+//Allows drag/drop with window
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(isMouseDown)
@@ -77,6 +82,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+//Colors buttons when pressed/released
 void MainWindow::on_loginButton_pressed()
 {
     ui->loginButton->setStyleSheet("background-color: Silver;"
@@ -87,6 +93,7 @@ void MainWindow::on_loginButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors buttons when pressed/released
 void MainWindow::on_loginButton_released()
 {
     ui->loginButton->setStyleSheet("background-color: Gainsboro;"
@@ -97,7 +104,7 @@ void MainWindow::on_loginButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
-
+//Logs user into StockStallion
 void MainWindow::on_loginButton_clicked()
 {
     //Login debug
@@ -127,11 +134,13 @@ void MainWindow::on_loginButton_clicked()
     db.close();
 }
 
+//Closes window
 void MainWindow::on_pushButton_2_clicked()
 {
     this->close();
 }
 
+//Opens register window
 void MainWindow::on_pushButton_clicked()
 {
     this->hide();

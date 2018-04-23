@@ -1,6 +1,8 @@
 #include "tab_profile.h"
 #include "ui_tab_profile.h"
 #include <QtSql>
+#include <QMessageBox>
+
 tab_Profile::tab_Profile(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::tab_Profile)
@@ -8,10 +10,15 @@ tab_Profile::tab_Profile(QWidget *parent) :
     ui->setupUi(this);
 }
 
+//Passes the username to this tab object
 void tab_Profile::setUsername(QString name)
 {
     username = name;
+}
 
+//Displays real-time statistics to user about their portfolio
+void tab_Profile::refresh()
+{
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("stockstallion.db");
     if(db.open())
@@ -55,6 +62,7 @@ void tab_Profile::setUsername(QString name)
     }
 }
 
+//Destructor
 tab_Profile::~tab_Profile()
 {
     delete ui;

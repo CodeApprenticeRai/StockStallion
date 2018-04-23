@@ -2,6 +2,7 @@
 #include "ui_stockselection.h"
 #include <QMouseEvent>
 
+//Initializes stock selection window.
 StockSelection::StockSelection(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::StockSelection)
@@ -22,6 +23,7 @@ StockSelection::StockSelection(QWidget *parent) :
 
 }
 
+//Allows drag/drop on window
 void StockSelection::mousePressEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -33,12 +35,14 @@ void StockSelection::mousePressEvent(QMouseEvent *event)
     }
 }
 
+//Allows drag/drop on window
 void StockSelection::mouseReleaseEvent(QMouseEvent *event)
 {
     isMouseDown = false;
     offset = 0;
 }
 
+//Allows drag/drop on window
 void StockSelection::mouseMoveEvent(QMouseEvent *event)
 {
     if(isMouseDown)
@@ -48,17 +52,20 @@ void StockSelection::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+//Deconstructor
 StockSelection::~StockSelection()
 {
     delete ui;
 }
 
+//Closes window. Sends signal that it was canceled
 void StockSelection::on_cancelButton_clicked()
 {
     canceled = true;
     this->close();
 }
 
+//Colors button to signify press/release
 void StockSelection::on_cancelButton_pressed()
 {
     ui->cancelButton->setStyleSheet("background-color: Silver;"
@@ -69,6 +76,7 @@ void StockSelection::on_cancelButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors button to signify press/release
 void StockSelection::on_cancelButton_released()
 {
     ui->cancelButton->setStyleSheet("background-color: Gainsboro;"
@@ -79,6 +87,7 @@ void StockSelection::on_cancelButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors button to signify press/release
 void StockSelection::on_addStockButton_pressed()
 {
     ui->addStockButton->setStyleSheet("background-color: Silver;"
@@ -89,6 +98,7 @@ void StockSelection::on_addStockButton_pressed()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Colors button to signify press/release
 void StockSelection::on_addStockButton_released()
 {
     ui->addStockButton->setStyleSheet("background-color: Gainsboro;"
@@ -99,6 +109,7 @@ void StockSelection::on_addStockButton_released()
                                    "font: 12pt \"Century Gothic\"");
 }
 
+//Closes window
 void StockSelection::on_addStockButton_clicked()
 {
     if(ui->tickerTextBox->text() == "")
@@ -107,6 +118,7 @@ void StockSelection::on_addStockButton_clicked()
     this->close();
 }
 
+//Returns the stock ticker
 QString StockSelection::getTicker()
 {
     return ui->tickerTextBox->text().toUpper();

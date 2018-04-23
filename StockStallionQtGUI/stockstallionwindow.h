@@ -20,7 +20,6 @@ public:
     explicit StockStallionWindow(QWidget *parent = 0);
     void setUserName(QString name);
     void setPassWord(QString pass);
-    void requestRead(QNetworkReply *reply);
     ~StockStallionWindow();
 
 protected:
@@ -30,7 +29,6 @@ protected:
     QPoint *offset;
 
 private slots:
-    void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
 

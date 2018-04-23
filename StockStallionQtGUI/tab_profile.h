@@ -14,6 +14,7 @@ class tab_Profile : public QWidget
 public:
     explicit tab_Profile(QWidget *parent = 0);
     void setUsername(QString name);
+    void refresh();
     ~tab_Profile();
 
 private:
