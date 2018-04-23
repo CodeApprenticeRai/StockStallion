@@ -20,10 +20,13 @@ public:
     void setCurrentPrice(double price);
     double getTotalCurrentValue();
     double getPercentChange();
+    double getBoughtPrice();
+    int getShares();
     QString getStockName();
+
     void deSelect();
     void select();
-
+    bool isSelected();
     ~portfolioStockWidget();
 
 protected:
@@ -36,9 +39,9 @@ private:
     double currentPrice;
     double totalCurrentValue;
     double percentChange;
+    void updateValues();
     bool selected = false;
 
-    void updateValues();
 };
 
 #endif // PORTFOLIOSTOCKWIDGET_H

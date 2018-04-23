@@ -134,6 +134,7 @@ void RegisterWindow::on_registerButton_clicked()
         {
             QSqlQuery query;
             db.exec("CREATE TABLE IF NOT EXISTS users( id INT , username TEXT PRIMARY KEY NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, stocklist TEXT);");
+            db.exec("CREATE TABLE IF NOT EXISTS transactions( username TEXT NOT NULL, ticker NOT NULL, num_shares INT NOT NULL, buy_price NOT NULL, date_bought TEXT, has_been_sold INT);");
 
             //Checks if username already exists
             bool validUsername = false;

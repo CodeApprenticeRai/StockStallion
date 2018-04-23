@@ -27,12 +27,14 @@ void portfolioStockWidget::setShares(int shares)
 
 void portfolioStockWidget::setBoughtAt(double price)
 {
+    boughtAtPrice = price;
     ui->boughtAtLabel->setText(QString::number(price));
     updateValues();
 }
 
 void portfolioStockWidget::setCurrentPrice(double price)
 {
+    currentPrice = price;
     ui->currentPriceLabel->setText(QString::number(price));
     updateValues();
 }
@@ -41,17 +43,27 @@ void portfolioStockWidget::updateValues()
 {
     //Determine percent change value
     percentChange = ((currentPrice-boughtAtPrice)/currentPrice)*100;
-    ui->changeLabel->setText(QString::number(percentChange));
+    ui->changeLabel->setText(QString::number(percentChange) + "%");
 
     if(percentChange < 0)
-        ui->changeLabel->setStyleSheet("color: red");
+        ui->changeLabel->setStyleSheet("color: red;font: 12pt \"Century Gothic\";");
     else if(percentChange >= 0)
-        ui->changeLabel->setStyleSheet("color: black");
+        ui->changeLabel->setStyleSheet("color: black;font: 12pt \"Century Gothic\";");
 
 
     //Determine current total value
     totalCurrentValue = currentPrice * shares;
     ui->totalValueLabel->setText("$" + QString::number(totalCurrentValue));
+}
+
+double portfolioStockWidget::getTotalCurrentValue()
+{
+    return totalCurrentValue;
+}
+
+double portfolioStockWidget::getPercentChange()
+{
+    return percentChange;
 }
 
 void portfolioStockWidget::mousePressEvent(QMouseEvent *event)
@@ -70,6 +82,16 @@ QString portfolioStockWidget::getStockName()
     return ui->tickerLabel->text();
 }
 
+double portfolioStockWidget::getBoughtPrice()
+{
+    return boughtAtPrice;
+}
+
+int portfolioStockWidget::getShares()
+{
+    return shares;
+}
+
 void portfolioStockWidget::select()
 {
     selected = true;
@@ -82,3 +104,7 @@ void portfolioStockWidget::deSelect()
     ui->frame->setStyleSheet("background-color:transparent");
 }
 
+bool portfolioStockWidget::isSelected()
+{
+    return selected;
+}

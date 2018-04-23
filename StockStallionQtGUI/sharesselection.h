@@ -17,6 +17,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     int getShares();
+    void setPrice(double stockPrice);
     QPoint *offset;
 
     bool canceled = false;
@@ -36,8 +37,11 @@ private slots:
 
     void on_addStockButton_clicked();
 
+    void on_sharesSpinBox_valueChanged(const QString &arg1);
+
 private:
     Ui::SharesSelection *ui;
+    double price;
     bool isMouseDown = false;
 };
 

@@ -56,7 +56,6 @@ private slots:
 
 private:
     void hideAllTabs();
-    void addStocksToPortfolio();
 
     QString username;
     QString password;

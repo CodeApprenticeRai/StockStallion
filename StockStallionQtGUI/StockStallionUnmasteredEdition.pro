@@ -6,6 +6,10 @@
 
 QT       += core gui sql network
 
+#LIBS += C:/Qt/5.10.1/msvc2015/bin/libcrypto-1_1.lib
+#LIBS += C:/Qt/5.10.1/msvc2015/bin/libssl-1_1.lib
+INCLUDEPATH += C:/OpenSSL-Win32/include
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = StockStallionUnmasteredEdition
@@ -33,7 +37,8 @@ SOURCES += \
     tab_about.cpp \
     portfoliostockwidget.cpp \
     stockselection.cpp \
-    sharesselection.cpp
+    sharesselection.cpp \
+    tickerprice.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +49,8 @@ HEADERS += \
     tab_about.h \
     portfoliostockwidget.h \
     stockselection.h \
-    sharesselection.h
+    sharesselection.h \
+    tickerprice.h
 
 FORMS += \
     mainwindow.ui \

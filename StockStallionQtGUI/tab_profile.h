@@ -13,10 +13,12 @@ class tab_Profile : public QWidget
 
 public:
     explicit tab_Profile(QWidget *parent = 0);
+    void setUsername(QString name);
     ~tab_Profile();
 
 private:
     Ui::tab_Profile *ui;
+    QString username;
 };
 
 #endif // TAB_PROFILE_H

@@ -18,7 +18,11 @@ SharesSelection::SharesSelection(QWidget *parent) :
     //Colors the window white
     ui->centralWidget->setObjectName("centralWidget");
     ui->centralWidget->setStyleSheet(" #centralWidget {background-color: qlineargradient(x1:0, x2: 0, y1: 0, y2: .5, stop: 0 #84A9FF, stop: 0.28 #84A9FF, stop: 0.281 white, stop: 1 white); border-radius:5px; border:1px solid black}");
+}
 
+void SharesSelection::on_sharesSpinBox_valueChanged(const QString &arg1)
+{
+    ui->totalValueLabel->setText("Total Value: $" + QString::number(price*ui->sharesSpinBox->value()));
 }
 
 void SharesSelection::mousePressEvent(QMouseEvent *event)
@@ -61,6 +65,12 @@ void SharesSelection::on_cancelButton_clicked()
 int SharesSelection::getShares()
 {
     return ui->sharesSpinBox->value();
+}
+
+void SharesSelection::setPrice(double stockPrice)
+{
+    price = stockPrice;
+    ui->totalValueLabel->setText("Total Value: $" + QString::number(price));
 }
 
 void SharesSelection::on_cancelButton_pressed()

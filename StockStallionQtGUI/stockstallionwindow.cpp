@@ -49,8 +49,6 @@ StockStallionWindow::StockStallionWindow(QWidget *parent) :
     //Hide profile and about tab by default
     hideAllTabs();
     ui->portfolioTab->show();
-
-    addStocksToPortfolio();
 }
 
 StockStallionWindow::~StockStallionWindow()
@@ -180,11 +178,6 @@ void StockStallionWindow::on_profileButton_released()
     ui->profileButton->setStyleSheet("background-color:rgb(245, 245, 245); border-style: solid; border-color: black; font: 12pt \"Century Gothic\"");
 }
 
-void StockStallionWindow::addStocksToPortfolio()
-{
-
-}
-
 //Used to determine which user is using the form
 void StockStallionWindow::setUserName(QString name)
 {
@@ -192,6 +185,8 @@ void StockStallionWindow::setUserName(QString name)
     QString displayName = username;
     //displayName[0] = QString.toUpper(displayName[0]);
     ui->portfolioTab->setPortfolioText(displayName.left(1).toUpper() + displayName.right(displayName.length()-1) + "'s Portfolio:");
+    ui->portfolioTab->setUsername(name);
+    ui->profileTab->setUsername(name);
 }
 
 //Used to verfiy that the user is valid

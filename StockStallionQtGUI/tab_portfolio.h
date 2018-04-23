@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include "stockselection.h"
 #include "portfoliostockwidget.h"
+#include "tickerprice.h"
 
 #include <QtNetwork>
 #include <QNetworkAccessManager>
@@ -23,6 +24,7 @@ class tab_Portfolio : public QWidget
 public:
     explicit tab_Portfolio(QWidget *parent = 0);
     void setPortfolioText(QString text);
+    void setUsername(QString name);
 
     ~tab_Portfolio();
 
@@ -57,6 +59,12 @@ private slots:
     void managerFinished(QNetworkReply *reply);
 
 private:
+    void initializeStocklist();
+    void updateTransactions(QString ticker, double price, int shares);
+    void removeTransaction(QString ticker, double price, int shares);
+    void updateStockList();
+    double getCurrentPrice(QString ticker);
+
     QNetworkAccessManager *manager;
     QNetworkRequest request;
 
@@ -66,6 +74,11 @@ private:
     int currentPage = 0;
     int lastPage = 0;
     QList<int> pageCount;
+    double networkStockPrice;
+    QString username;
+    QString networkStockDate = "";
+    QList<TickerPrice *> savedPrices;
+
 };
 
 #endif // TAB_PORTFOLIO_H

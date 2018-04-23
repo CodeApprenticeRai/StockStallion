@@ -105,29 +105,6 @@ font: 12pt &quot;Century Gothic&quot;;
        <enum>Qt::ToolButtonTextBesideIcon</enum>
       </property>
      </widget>
-     <widget class="QToolButton" name="settingsButton">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>150</y>
-        <width>111</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color:rgb(245, 245, 245);
-border-style: solid;
-border-color: black;
-font: 12pt &quot;Century Gothic&quot;;
-</string>
-      </property>
-      <property name="text">
-       <string>Settings</string>
-      </property>
-      <property name="toolButtonStyle">
-       <enum>Qt::ToolButtonTextBesideIcon</enum>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="page_2"/>
    </widget>
